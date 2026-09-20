@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>task_switch_system</name>
+  <version>1.0.0</version>
+  <description>Standalone current-map task switching system.</description>
+  <maintainer email="mile@localhost">mile</maintainer>
+  <license>Proprietary</license>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>inspection_interfaces</exec_depend>
+  <exec_depend>python3-requests</exec_depend>
+  <exec_depend>python3-pyqt5</exec_depend>
+</package>

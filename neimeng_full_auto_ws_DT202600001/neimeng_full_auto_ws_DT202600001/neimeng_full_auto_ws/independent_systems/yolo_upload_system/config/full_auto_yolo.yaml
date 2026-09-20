@@ -1,0 +1,10 @@
+# RKNN进程独立运行；ROS桥从此ZMQ地址接收逐帧结果。
+zmq_address: "tcp://127.0.0.1:5566"
+target_class: "truck"
+target_class_id: -1
+min_confidence: 0.35
+minimum_frames: 10
+minimum_detected_frames: 3
+minimum_frame_ratio: 0.30
+stale_timeout: 2.0
+max_task_number: 10

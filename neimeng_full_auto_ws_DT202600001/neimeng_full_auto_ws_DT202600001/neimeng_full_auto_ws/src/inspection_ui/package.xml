@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>inspection_ui</name><version>1.0.0</version>
+  <description>PyQt5 local task and inspection panel.</description>
+  <maintainer email="robot@example.com">Robot Team</maintainer><license>Proprietary</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend><depend>std_msgs</depend><depend>inspection_interfaces</depend>
+  <exec_depend>python3-pyqt5</exec_depend>
+</package>

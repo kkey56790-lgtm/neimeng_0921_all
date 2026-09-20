@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robot_base_bridge</name><version>1.0.0</version>
+  <description>HTTP bridge for chassis pose, patrol points and task control.</description>
+  <maintainer email="robot@example.com">Robot Team</maintainer><license>Proprietary</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend><depend>std_msgs</depend><depend>inspection_interfaces</depend>
+  <exec_depend>python3-requests</exec_depend>
+</package>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ptz_follow_system</name>
+  <version>1.0.0</version>
+  <description>Standalone point-driven PTZ follow system.</description>
+  <maintainer email="mile@localhost">mile</maintainer>
+  <license>Proprietary</license>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>inspection_interfaces</exec_depend>
+  <exec_depend>python3-requests</exec_depend>
+</package>

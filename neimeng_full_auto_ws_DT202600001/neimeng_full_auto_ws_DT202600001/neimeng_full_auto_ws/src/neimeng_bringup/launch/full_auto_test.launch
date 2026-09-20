@@ -1,0 +1,46 @@
+<launch>
+  <arg name="enable_ptz" default="true"/>
+  <arg name="enable_ui" default="true"/>
+  <arg name="robot_config" default="$(find neimeng_bringup)/config/robot.yaml"/>
+  <arg name="ptz_config" default="$(find neimeng_bringup)/config/ptz.yaml"/>
+  <arg name="ptz_points_config" default="$(find neimeng_bringup)/config/ptz_points.yaml"/>
+  <arg name="yolo_bridge_config" default="$(find neimeng_bringup)/config/full_auto_yolo.yaml"/>
+  <arg name="yolo_flow_config" default="$(find neimeng_bringup)/config/yolo_flow.yaml"/>
+  <arg name="auto_drive_config" default="$(find neimeng_bringup)/config/auto_drive.yaml"/>
+  <arg name="device_config" default="$(find neimeng_bringup)/config/device.yaml"/>
+
+  <!-- 不包含MQTT节点；不要与real.launch/task_switch_only.launch同时运行。 -->
+  <node pkg="robot_base_bridge" type="safe_robot_bridge.py" name="robot_bridge" output="screen" respawn="true" respawn_delay="3">
+    <rosparam command="load" file="$(arg robot_config)"/>
+    <rosparam command="load" file="$(find neimeng_bringup)/config/robot_safe.yaml"/>
+    <rosparam command="load" file="$(arg device_config)"/>
+  </node>
+
+  <group if="$(arg enable_ptz)">
+    <node pkg="ptz_control" type="full_auto_ptz_controller.py" name="ptz_controller" output="screen" respawn="true" respawn_delay="3">
+      <rosparam command="load" file="$(arg ptz_config)"/>
+      <rosparam command="load" file="$(arg ptz_points_config)"/>
+    </node>
+  </group>
+
+  <node pkg="inspection_core" type="full_auto_yolo_bridge.py" name="yolo_bridge" output="screen" respawn="true" respawn_delay="3">
+    <rosparam command="load" file="$(arg yolo_bridge_config)"/>
+  </node>
+
+  <node pkg="inspection_core" type="map_scoped_full_auto_orchestrator.py" name="inspection_orchestrator" output="screen" respawn="true" respawn_delay="3">
+    <!-- 三个配置由旧配置逐块等价拆分，顶层参数互不重名。 -->
+    <rosparam command="load" file="$(arg auto_drive_config)"/>
+    <rosparam command="load" file="$(arg ptz_points_config)"/>
+    <rosparam command="load" file="$(arg yolo_flow_config)"/>
+    <rosparam command="load" file="$(arg device_config)"/>
+  </node>
+
+  <node pkg="inspection_core" type="result_store.py" name="result_store" output="screen">
+    <rosparam command="load" file="$(find neimeng_bringup)/config/storage.yaml"/>
+  </node>
+
+  <group if="$(arg enable_ui)">
+    <node pkg="inspection_ui" type="full_auto_map_test_panel.py" name="full_auto_test_panel" output="screen"/>
+  </group>
+</launch>
+

@@ -1,0 +1,68 @@
+ffmpeg version 4.2.7-0ubuntu0.1 Copyright (c) 2000-2022 the FFmpeg developers
+  built with gcc 9 (Ubuntu 9.4.0-1ubuntu1~20.04.1)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.1 --toolchain=hardened --libdir=/usr/lib/aarch64-linux-gnu --incdir=/usr/include/aarch64-linux-gnu --arch=arm64 --enable-gpl --disable-stripping --enable-avresample --disable-filter=resample --enable-avisynth --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librsvg --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
+  libavutil      56. 31.100 / 56. 31.100
+  libavcodec     58. 54.100 / 58. 54.100
+  libavformat    58. 29.100 / 58. 29.100
+  libavdevice    58.  8.100 / 58.  8.100
+  libavfilter     7. 57.100 /  7. 57.100
+  libavresample   4.  0.  0 /  4.  0.  0
+  libswscale      5.  5.100 /  5.  5.100
+  libswresample   3.  5.100 /  3.  5.100
+  libpostproc    55.  5.100 / 55.  5.100
+Splitting the commandline.
+Reading option '-loglevel' ... matched as option 'loglevel' (set logging level) with argument 'debug'.
+Reading option '-re' ... matched as option 're' (read input at native frame rate) with argument '1'.
+Reading option '-f' ... matched as option 'f' (force format) with argument 'lavfi'.
+Reading option '-i' ... matched as input url with argument 'testsrc=size=640x480:rate=15'.
+Reading option '-c:v' ... matched as option 'c' (codec name) with argument 'libx264'.
+Reading option '-preset' ... matched as AVOption 'preset' with argument 'ultrafast'.
+Reading option '-tune' ... matched as AVOption 'tune' with argument 'zerolatency'.
+Reading option '-pix_fmt' ... matched as option 'pix_fmt' (set pixel format) with argument 'yuv420p'.
+Reading option '-f' ... matched as option 'f' (force format) with argument 'flv'.
+Reading option 'rtmp://222.187.130.102:1935/live/DT202600001' ... matched as output url.
+Finished splitting the commandline.
+Parsing a group of options: global .
+Applying option loglevel (set logging level) with argument debug.
+Successfully parsed a group of options.
+Parsing a group of options: input url testsrc=size=640x480:rate=15.
+Applying option re (read input at native frame rate) with argument 1.
+Applying option f (force format) with argument lavfi.
+Successfully parsed a group of options.
+Opening an input file: testsrc=size=640x480:rate=15.
+detected 8 logical cores
+[Parsed_testsrc_0 @ 0x558e6c1280] Setting 'size' to value '640x480'
+[Parsed_testsrc_0 @ 0x558e6c1280] Setting 'rate' to value '15'
+[Parsed_testsrc_0 @ 0x558e6c1280] size:640x480 rate:15/1 duration:-1.000000 sar:1/1
+[AVFilterGraph @ 0x558e687200] query_formats: 2 queried, 1 merged, 0 already done, 0 delayed
+[lavfi @ 0x558e6bf2a0] All info found
+Input #0, lavfi, from 'testsrc=size=640x480:rate=15':
+  Duration: N/A, start: 0.000000, bitrate: N/A
+    Stream #0:0, 1, 1/15: Video: rawvideo, 1 reference frame (RGB[24] / 0x18424752), rgb24, 640x480 [SAR 1:1 DAR 4:3], 0/1, 15 tbr, 15 tbn, 15 tbc
+Successfully opened the file.
+Parsing a group of options: output url rtmp://222.187.130.102:1935/live/DT202600001.
+Applying option c:v (codec name) with argument libx264.
+Applying option pix_fmt (set pixel format) with argument yuv420p.
+Applying option f (force format) with argument flv.
+Successfully parsed a group of options.
+Opening an output file: rtmp://222.187.130.102:1935/live/DT202600001.
+[rtmp @ 0x558e6c61a0] No default whitelist set
+[tcp @ 0x558e683750] No default whitelist set
+[tcp @ 0x558e683750] Original list of addresses:
+[tcp @ 0x558e683750] Address 222.187.130.102 port 1935
+[tcp @ 0x558e683750] Interleaved list of addresses:
+[tcp @ 0x558e683750] Address 222.187.130.102 port 1935
+[tcp @ 0x558e683750] Starting connection attempt to 222.187.130.102 port 1935
+[tcp @ 0x558e683750] Successfully connected to 222.187.130.102 port 1935
+[rtmp @ 0x558e6c61a0] Handshaking...
+[rtmp @ 0x558e6c61a0] Type answer 3
+[rtmp @ 0x558e6c61a0] Server version 0.0.0.0
+[rtmp @ 0x558e6c61a0] Proto = rtmp, path = /live/DT202600001, app = live, fname = DT202600001
+[rtmp @ 0x558e6c61a0] Window acknowledgement size = 2500000
+[rtmp @ 0x558e6c61a0] Max sent, unacked = 2500000
+[rtmp @ 0x558e6c61a0] New incoming chunk size = 4096
+[rtmp @ 0x558e6c61a0] Releasing stream...
+[rtmp @ 0x558e6c61a0] FCPublish stream...
+[rtmp @ 0x558e6c61a0] Creating stream...
+[rtmp @ 0x558e6c61a0] Sending publish command for 'DT202600001'
+rtmp://222.187.130.102:1935/live/DT202600001: Input/output error

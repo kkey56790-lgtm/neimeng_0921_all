@@ -1,0 +1,16 @@
+# YOLO采集触发。模型选择在yolo.env，识别阈值在full_auto_yolo.yaml。
+
+detection_collection_enabled: true
+
+detection_points:
+  "起始点01": {enabled: true, collect_seconds: 6.0}
+  "起始点02": {enabled: true, collect_seconds: 6.0}
+  "起始点03": {enabled: true, collect_seconds: 6.0}
+  "起始点04": {enabled: true, collect_seconds: 6.0}
+
+detection:
+  collect_seconds: 6.0
+  # 对应起始点只判断truck；其他到达点过滤truck并记录其余巡检项目。
+  collect_non_truck_at_other_points: true
+
+# 留空表示不播报；填写上位机 get_wav_list 返回的真实文件名即可联动。

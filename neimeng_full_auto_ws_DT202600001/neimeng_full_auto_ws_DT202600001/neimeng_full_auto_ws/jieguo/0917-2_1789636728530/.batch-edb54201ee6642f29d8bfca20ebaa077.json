@@ -1,0 +1,93 @@
+{
+  "taskId": "2026-09-17 17:18:46:0917-2",
+  "taskName": "0917-2",
+  "objectId": "DT202600001-6b0ac93931e7426b89fe6aaa50e11ee1",
+  "createdMs": 1789636728530,
+  "managedDirectory": true,
+  "state": "READY",
+  "images": [
+    "0917-2_1789636731543.jpg",
+    "0917-2_1789636736293.jpg",
+    "0917-2_1789636739826.jpg",
+    "0917-2_1789636744866.jpg",
+    "0917-2_1789636747904.jpg",
+    "0917-2_1789636751365.jpg"
+  ],
+  "hashes": {
+    "0917-2_1789636731543.jpg": "5245a986b5d1458c1c4f4a12ddfcc16a8a8f5db6698ceffb3323d11e91809f45",
+    "0917-2_1789636736293.jpg": "a8ea306cb05d26ea305cdb713bdfbfd049cae340e435ce08925f9943287ebed3",
+    "0917-2_1789636739826.jpg": "4419232bfd964ee3124de85cd8202f95fef15697ba53729a8cf841e90b3e4edb",
+    "0917-2_1789636744866.jpg": "8ddd653294d905603113979aecb04d8680d06f4f3be15605e1e87e9de36a2914",
+    "0917-2_1789636747904.jpg": "87c30bdfec0175f65c423b869e32ac233fbf45ebbb27c953091e7e1b2b500f24",
+    "0917-2_1789636751365.jpg": "6cf0fa8b0a9b380ae7f18cfa8ac9d061158c9229e56b95dea6d20c9b0dfae86e",
+    "0917-2.txt": "5e5cff0a390d3a5ba9a0e24a91dda53ad167c6d6e19b76fd29694a8a558710ef"
+  },
+  "txt": "0917-2.txt",
+  "counts": {
+    "chocks": 0,
+    "tyre": 1,
+    "extinguisher": 1,
+    "plate": 0,
+    "tag": 0,
+    "light": 0,
+    "support": 1,
+    "screw": 0,
+    "tank": 0,
+    "truck": 0
+  },
+  "items": [
+    {
+      "id": 0,
+      "name": "chocks",
+      "display_name": "挡掩"
+    },
+    {
+      "id": 1,
+      "name": "tyre",
+      "display_name": "轮胎"
+    },
+    {
+      "id": 2,
+      "name": "extinguisher",
+      "display_name": "灭火器"
+    },
+    {
+      "id": 3,
+      "name": "plate",
+      "display_name": "车牌"
+    },
+    {
+      "id": 4,
+      "name": "tag",
+      "display_name": "检修牌"
+    },
+    {
+      "id": 5,
+      "name": "light",
+      "display_name": "车灯"
+    },
+    {
+      "id": 6,
+      "name": "support",
+      "display_name": "支护"
+    },
+    {
+      "id": 7,
+      "name": "screw",
+      "display_name": "轮毂螺丝"
+    },
+    {
+      "id": 8,
+      "name": "tank",
+      "display_name": "油箱"
+    },
+    {
+      "id": 9,
+      "name": "truck",
+      "display_name": "卡车"
+    }
+  ],
+  "content": "任务名：0917-2\n挡掩：0\n轮胎：1\n灭火器：1\n车牌：0\n检修牌：0\n车灯：0\n支护：1\n轮毂螺丝：0\n油箱：0\n卡车：0\n",
+  "finishReason": "task_changed",
+  "finishedMs": 1789636752460
+}

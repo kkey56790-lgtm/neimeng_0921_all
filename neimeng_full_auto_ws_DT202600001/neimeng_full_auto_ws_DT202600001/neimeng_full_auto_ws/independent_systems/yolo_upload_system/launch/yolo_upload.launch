@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="yolo_upload_system" type="full_auto_yolo_bridge.py" name="yolo_bridge" output="screen" respawn="true" respawn_delay="3">
+    <rosparam command="load" file="$(find yolo_upload_system)/config/full_auto_yolo.yaml"/>
+  </node>
+</launch>

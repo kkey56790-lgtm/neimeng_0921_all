@@ -1,0 +1,25 @@
+<launch>
+  <arg name="enable_ui" default="true"/>
+  <arg name="enable_yolo" default="false"/>
+
+  <node pkg="task_switch_system" type="safe_robot_bridge.py" name="robot_bridge" output="screen" respawn="true" respawn_delay="3">
+    <rosparam command="load" file="$(find task_switch_system)/config/robot.yaml"/>
+    <rosparam command="load" file="$(find task_switch_system)/config/robot_safe.yaml"/>
+    <rosparam command="load" file="$(find task_switch_system)/config/device.yaml"/>
+  </node>
+
+  <node pkg="task_switch_system" type="task_switch_only_orchestrator.py" name="inspection_orchestrator" output="screen" respawn="true" respawn_delay="3">
+    <rosparam command="load" file="$(find task_switch_system)/config/auto_drive.yaml"/>
+    <rosparam command="load" file="$(find task_switch_system)/config/yolo_flow.yaml"/>
+    <rosparam command="load" file="$(find task_switch_system)/config/device.yaml"/>
+    <param name="detection_collection_enabled" value="$(arg enable_yolo)"/>
+  </node>
+
+  <node pkg="task_switch_system" type="result_store.py" name="result_store" output="screen">
+    <rosparam command="load" file="$(find task_switch_system)/config/storage.yaml"/>
+  </node>
+
+  <group if="$(arg enable_ui)">
+    <node pkg="task_switch_system" type="full_auto_map_test_panel.py" name="task_switch_panel" output="screen"/>
+  </group>
+</launch>

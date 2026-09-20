@@ -1,0 +1,79 @@
+{
+  "taskName": "MOVE_TO",
+  "objectId": "DT202600001-67e3b077155841f1a5cc9097d97e6070",
+  "completedMs": 1789614291558,
+  "confirmation": "HTTP PUT success + MQTT PUBACK; not platform database ack",
+  "receipts": {
+    "MOVE_TO_1789614232634.jpg": {
+      "tid": "7370bb3d8fa4495fa470bca3ea09d5ae",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-67e3b077155841f1a5cc9097d97e6070/MOVE_TO_1789614232634.jpg",
+      "putCompletedMs": 1789614288221,
+      "acknowledged": true,
+      "acknowledgedMs": 1789614288303
+    },
+    "MOVE_TO_1789614235680.jpg": {
+      "tid": "7370bb3d8fa4495fa470bca3ea09d5ae",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-67e3b077155841f1a5cc9097d97e6070/MOVE_TO_1789614235680.jpg",
+      "putCompletedMs": 1789614288570,
+      "acknowledged": true,
+      "acknowledgedMs": 1789614288721
+    },
+    "MOVE_TO_1789614238714.jpg": {
+      "tid": "7370bb3d8fa4495fa470bca3ea09d5ae",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-67e3b077155841f1a5cc9097d97e6070/MOVE_TO_1789614238714.jpg",
+      "putCompletedMs": 1789614288979,
+      "acknowledged": true,
+      "acknowledgedMs": 1789614289095
+    },
+    "MOVE_TO_1789614241951.jpg": {
+      "tid": "7370bb3d8fa4495fa470bca3ea09d5ae",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-67e3b077155841f1a5cc9097d97e6070/MOVE_TO_1789614241951.jpg",
+      "putCompletedMs": 1789614289351,
+      "acknowledged": true,
+      "acknowledgedMs": 1789614289431
+    },
+    "MOVE_TO_1789614245672.jpg": {
+      "tid": "7370bb3d8fa4495fa470bca3ea09d5ae",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-67e3b077155841f1a5cc9097d97e6070/MOVE_TO_1789614245672.jpg",
+      "putCompletedMs": 1789614289672,
+      "acknowledged": true,
+      "acknowledgedMs": 1789614289766
+    },
+    "MOVE_TO_1789614249501.jpg": {
+      "tid": "7370bb3d8fa4495fa470bca3ea09d5ae",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-67e3b077155841f1a5cc9097d97e6070/MOVE_TO_1789614249501.jpg",
+      "putCompletedMs": 1789614290041,
+      "acknowledged": true,
+      "acknowledgedMs": 1789614290134
+    },
+    "MOVE_TO_1789614256209.jpg": {
+      "tid": "7370bb3d8fa4495fa470bca3ea09d5ae",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-67e3b077155841f1a5cc9097d97e6070/MOVE_TO_1789614256209.jpg",
+      "putCompletedMs": 1789614290410,
+      "acknowledged": true,
+      "acknowledgedMs": 1789614290508
+    },
+    "MOVE_TO_1789614276324.jpg": {
+      "tid": "7370bb3d8fa4495fa470bca3ea09d5ae",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-67e3b077155841f1a5cc9097d97e6070/MOVE_TO_1789614276324.jpg",
+      "putCompletedMs": 1789614290763,
+      "acknowledged": true,
+      "acknowledgedMs": 1789614290852
+    },
+    "MOVE_TO_1789614283386.jpg": {
+      "tid": "7370bb3d8fa4495fa470bca3ea09d5ae",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-67e3b077155841f1a5cc9097d97e6070/MOVE_TO_1789614283386.jpg",
+      "putCompletedMs": 1789614291107,
+      "acknowledged": true,
+      "acknowledgedMs": 1789614291213
+    },
+    "MOVE_TO_1789614286472.jpg": {
+      "tid": "7370bb3d8fa4495fa470bca3ea09d5ae",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-67e3b077155841f1a5cc9097d97e6070/MOVE_TO_1789614286472.jpg",
+      "putCompletedMs": 1789614291447,
+      "acknowledged": true,
+      "acknowledgedMs": 1789614291528
+    }
+  },
+  "missingFiles": []
+}

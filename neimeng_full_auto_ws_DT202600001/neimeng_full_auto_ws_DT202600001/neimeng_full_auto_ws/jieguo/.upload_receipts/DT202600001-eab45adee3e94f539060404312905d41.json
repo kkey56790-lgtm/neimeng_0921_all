@@ -1,0 +1,51 @@
+{
+  "taskName": "任务7",
+  "objectId": "DT202600001-eab45adee3e94f539060404312905d41",
+  "completedMs": 1789544189608,
+  "confirmation": "HTTP PUT success + MQTT PUBACK; not platform database ack",
+  "receipts": {
+    "任务7_1789544163044.jpg": {
+      "tid": "dbf28b60260c44f8b2e02161c3805fc0",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-eab45adee3e94f539060404312905d41/7_1789544163044.jpg",
+      "putCompletedMs": 1789544187290,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544187398
+    },
+    "任务7_1789544167473.jpg": {
+      "tid": "dbf28b60260c44f8b2e02161c3805fc0",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-eab45adee3e94f539060404312905d41/7_1789544167473.jpg",
+      "putCompletedMs": 1789544187978,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544188090
+    },
+    "任务7_1789544170520.jpg": {
+      "tid": "dbf28b60260c44f8b2e02161c3805fc0",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-eab45adee3e94f539060404312905d41/7_1789544170520.jpg",
+      "putCompletedMs": 1789544188395,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544188557
+    },
+    "任务7_1789544173613.jpg": {
+      "tid": "dbf28b60260c44f8b2e02161c3805fc0",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-eab45adee3e94f539060404312905d41/7_1789544173613.jpg",
+      "putCompletedMs": 1789544188825,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544188913
+    },
+    "任务7_1789544176651.jpg": {
+      "tid": "dbf28b60260c44f8b2e02161c3805fc0",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-eab45adee3e94f539060404312905d41/7_1789544176651.jpg",
+      "putCompletedMs": 1789544189158,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544189236
+    },
+    "任务7_1789544180680.jpg": {
+      "tid": "dbf28b60260c44f8b2e02161c3805fc0",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-eab45adee3e94f539060404312905d41/7_1789544180680.jpg",
+      "putCompletedMs": 1789544189470,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544189593
+    }
+  },
+  "missingFiles": []
+}

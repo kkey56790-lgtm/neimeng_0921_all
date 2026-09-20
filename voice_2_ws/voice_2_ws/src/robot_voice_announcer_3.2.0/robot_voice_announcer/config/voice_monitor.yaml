@@ -1,0 +1,23 @@
+# Robot HTTP service from the supplied V2.3 protocol.
+robot_ip: "192.168.2.100"
+robot_port: 7999
+http_timeout: 0.6
+poll_hz: 5.0
+
+# Measured chassis speed thresholds.
+linear_threshold: 0.03
+angular_threshold: 0.08
+
+# Standard convention: positive angular velocity means a left turn.
+# Set false if the actual chassis reports the opposite sign.
+left_turn_positive: true
+
+# Reannounce an unchanged state after this many seconds.
+repeat_inspecting: 15.0
+repeat_stopped: 15.0
+repeat_reversing: 6.0
+repeat_turning: 6.0
+repeat_avoiding: 6.0
+
+# Verify that all six files exist in the robot HTTP voice list at startup.
+verify_remote_files: true

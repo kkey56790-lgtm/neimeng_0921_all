@@ -1,0 +1,107 @@
+{
+  "taskId": "2026-09-17 17:02:33:0917-2",
+  "taskName": "0917-2",
+  "objectId": "DT202600001-64611985491f412e8a554b54eca133be",
+  "createdMs": 1789635754121,
+  "managedDirectory": true,
+  "state": "READY",
+  "images": [
+    "0917-2_1789635755856.jpg",
+    "0917-2_1789635761506.jpg",
+    "0917-2_1789635764786.jpg",
+    "0917-2_1789635771798.jpg",
+    "0917-2_1789635774986.jpg",
+    "0917-2_1789635778967.jpg",
+    "0917-2_1789635781990.jpg",
+    "0917-2_1789635785037.jpg",
+    "0917-2_1789635788271.jpg",
+    "0917-2_1789635791399.jpg",
+    "0917-2_1789635794432.jpg",
+    "0917-2_1789635797551.jpg",
+    "0917-2_1789635800605.jpg"
+  ],
+  "hashes": {
+    "0917-2_1789635755856.jpg": "ebc75d9b80f586858b6e5d4de31564ceeeb4a7727f6878577b49aff2c926bc6f",
+    "0917-2_1789635761506.jpg": "5e41de1b380f0d869e0d55e5c621ccd9cd3e4424ec62b60e75b9dcda0211319a",
+    "0917-2_1789635764786.jpg": "98accc3493a65c262ee676a6d61ce4c847cf67a1a435f05a82a6897cc1b2ed4d",
+    "0917-2_1789635771798.jpg": "b366171b7bf3fec31e5e2a74e5525ee3bbfee119b06eef5bdd4ad49746b8a669",
+    "0917-2_1789635774986.jpg": "f2fb5df1dc14dad3dffca3f0993afa84b4de3f952ea16253083b4943ee9b6c29",
+    "0917-2_1789635778967.jpg": "022f398bf594a60c8b90b92970966c733dd78b0940a3c3da00600de5ad6534ab",
+    "0917-2_1789635781990.jpg": "6939b349c449cb7c834b23126c9ed4916be153cf900d629fd5c6743a45e60e3a",
+    "0917-2_1789635785037.jpg": "3eacc53607ee2b50b8a14c8179fa453f7aac5d9ace3675d380f8caf679caf7a7",
+    "0917-2_1789635788271.jpg": "100f188530fc4e0b8426777feff9744bd338b3ce52c27b616d633e67f069bec2",
+    "0917-2_1789635791399.jpg": "3d1cdc1724be79ce7b2d368bdfbc9922160e45cbb6b1444ed6b9f98634f6857e",
+    "0917-2_1789635794432.jpg": "567a40a11c0766b0e9205e6488341233c4cd74185de890604b4bfad5035fdca1",
+    "0917-2_1789635797551.jpg": "f961e9855d1efc7a0bcd42e44934a3f9248969fe255edb4e0f50200c4fee81fa",
+    "0917-2_1789635800605.jpg": "48544a1a00d473acbcb6c0d0e45e3e321a2386ad8d15531fd62ebca2d53bc0fa",
+    "0917-2.txt": "490d5a5078cd51b7dcbbfd208d2217df97db6c49ab714da1803f8a14e8e3c383"
+  },
+  "txt": "0917-2.txt",
+  "counts": {
+    "chocks": 0,
+    "tyre": 3,
+    "extinguisher": 0,
+    "plate": 0,
+    "tag": 0,
+    "light": 0,
+    "support": 1,
+    "screw": 0,
+    "tank": 0,
+    "truck": 0
+  },
+  "items": [
+    {
+      "id": 0,
+      "name": "chocks",
+      "display_name": "挡掩"
+    },
+    {
+      "id": 1,
+      "name": "tyre",
+      "display_name": "轮胎"
+    },
+    {
+      "id": 2,
+      "name": "extinguisher",
+      "display_name": "灭火器"
+    },
+    {
+      "id": 3,
+      "name": "plate",
+      "display_name": "车牌"
+    },
+    {
+      "id": 4,
+      "name": "tag",
+      "display_name": "检修牌"
+    },
+    {
+      "id": 5,
+      "name": "light",
+      "display_name": "车灯"
+    },
+    {
+      "id": 6,
+      "name": "support",
+      "display_name": "支护"
+    },
+    {
+      "id": 7,
+      "name": "screw",
+      "display_name": "轮毂螺丝"
+    },
+    {
+      "id": 8,
+      "name": "tank",
+      "display_name": "油箱"
+    },
+    {
+      "id": 9,
+      "name": "truck",
+      "display_name": "卡车"
+    }
+  ],
+  "content": "任务名：0917-2\n挡掩：0\n轮胎：3\n灭火器：0\n车牌：0\n检修牌：0\n车灯：0\n支护：1\n轮毂螺丝：0\n油箱：0\n卡车：0\n",
+  "finishReason": "task_changed",
+  "finishedMs": 1789635804244
+}

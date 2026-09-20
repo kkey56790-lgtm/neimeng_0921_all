@@ -1,0 +1,12 @@
+host: "192.168.2.64"
+port: 80
+username: "admin"
+password: "okwy1688"
+preset_settle_seconds: 2.0
+preset_speed: 1.0
+reconnect_seconds: 5.0
+
+default_sweep_steps:
+  - {direction: "left",  speed: 10, duration: 1.5, pause: 0.05}
+  - {direction: "right", speed: 10, duration: 3.0, pause: 0.05}
+  - {direction: "left",  speed: 10, duration: 1.5, pause: 0.05}

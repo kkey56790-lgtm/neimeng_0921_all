@@ -1,0 +1,58 @@
+{
+  "taskName": "MOVE_TO",
+  "objectId": "DT202600001-c220a14741dc46c592571cfc6342a388",
+  "completedMs": 1789630790164,
+  "confirmation": "HTTP PUT success + MQTT PUBACK; not platform database ack",
+  "receipts": {
+    "MOVE_TO_1789630632484.jpg": {
+      "tid": "fe78f503fb96471c992822d146f4e1b5",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-c220a14741dc46c592571cfc6342a388/MOVE_TO_1789630632484.jpg",
+      "putCompletedMs": 1789630787597,
+      "acknowledged": true,
+      "acknowledgedMs": 1789630787693
+    },
+    "MOVE_TO_1789630635602.jpg": {
+      "tid": "fe78f503fb96471c992822d146f4e1b5",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-c220a14741dc46c592571cfc6342a388/MOVE_TO_1789630635602.jpg",
+      "putCompletedMs": 1789630788002,
+      "acknowledged": true,
+      "acknowledgedMs": 1789630788136
+    },
+    "MOVE_TO_1789630639921.jpg": {
+      "tid": "fe78f503fb96471c992822d146f4e1b5",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-c220a14741dc46c592571cfc6342a388/MOVE_TO_1789630639921.jpg",
+      "putCompletedMs": 1789630788415,
+      "acknowledged": true,
+      "acknowledgedMs": 1789630788541
+    },
+    "MOVE_TO_1789630643962.jpg": {
+      "tid": "fe78f503fb96471c992822d146f4e1b5",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-c220a14741dc46c592571cfc6342a388/MOVE_TO_1789630643962.jpg",
+      "putCompletedMs": 1789630788875,
+      "acknowledged": true,
+      "acknowledgedMs": 1789630788993
+    },
+    "MOVE_TO_1789630647602.jpg": {
+      "tid": "fe78f503fb96471c992822d146f4e1b5",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-c220a14741dc46c592571cfc6342a388/MOVE_TO_1789630647602.jpg",
+      "putCompletedMs": 1789630789274,
+      "acknowledged": true,
+      "acknowledgedMs": 1789630789348
+    },
+    "MOVE_TO_1789630657104.jpg": {
+      "tid": "fe78f503fb96471c992822d146f4e1b5",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-c220a14741dc46c592571cfc6342a388/MOVE_TO_1789630657104.jpg",
+      "putCompletedMs": 1789630789623,
+      "acknowledged": true,
+      "acknowledgedMs": 1789630789723
+    },
+    "MOVE_TO_1789630663571.jpg": {
+      "tid": "fe78f503fb96471c992822d146f4e1b5",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-c220a14741dc46c592571cfc6342a388/MOVE_TO_1789630663571.jpg",
+      "putCompletedMs": 1789630790050,
+      "acknowledged": true,
+      "acknowledgedMs": 1789630790154
+    }
+  },
+  "missingFiles": []
+}

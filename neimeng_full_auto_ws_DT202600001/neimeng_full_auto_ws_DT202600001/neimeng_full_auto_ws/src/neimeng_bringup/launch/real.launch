@@ -1,0 +1,49 @@
+<launch>
+  <arg name="enable_mqtt" default="false"/>
+  <arg name="enable_ui" default="false"/>
+  <arg name="mqtt_credentials_file" default="$(find neimeng_bringup)/config/mqtt_credentials.yaml"/>
+  <arg name="robot_config" default="$(find neimeng_bringup)/config/robot.yaml"/>
+  <arg name="ptz_config" default="$(find neimeng_bringup)/config/ptz.yaml"/>
+  <arg name="device_config" default="$(find neimeng_bringup)/config/device.yaml"/>
+
+  <node pkg="robot_base_bridge" type="safe_robot_bridge.py" name="robot_bridge" output="screen" respawn="true" respawn_delay="3">
+    <rosparam command="load" file="$(arg robot_config)"/>
+    <rosparam command="load" file="$(find neimeng_bringup)/config/robot_safe.yaml"/>
+    <rosparam command="load" file="$(arg device_config)"/>
+  </node>
+
+  <node pkg="ptz_control" type="protected_ptz_controller.py" name="ptz_controller" output="screen" respawn="true" respawn_delay="3">
+    <rosparam command="load" file="$(arg ptz_config)"/>
+    <rosparam command="load" file="$(find neimeng_bringup)/config/ptz_points.yaml"/>
+  </node>
+
+  <node pkg="inspection_core" type="start_point_yolo_bridge.py" name="yolo_bridge" output="screen" respawn="true" respawn_delay="3">
+    <rosparam command="load" file="$(find neimeng_bringup)/config/yolo_bridge.yaml"/>
+    <rosparam command="load" file="$(find neimeng_bringup)/config/yolo_gated.yaml"/>
+  </node>
+
+  <node pkg="inspection_core" type="map_scoped_full_auto_orchestrator.py" name="inspection_orchestrator" output="screen" respawn="true" respawn_delay="3">
+    <rosparam command="load" file="$(find neimeng_bringup)/config/inspection.yaml"/>
+    <rosparam command="load" file="$(find neimeng_bringup)/config/inspection_numbered_flow.yaml"/>
+    <rosparam command="load" file="$(find neimeng_bringup)/config/ptz_points.yaml"/>
+    <rosparam command="load" file="$(arg device_config)"/>
+  </node>
+
+  <node pkg="inspection_core" type="result_store.py" name="result_store" output="screen">
+    <rosparam command="load" file="$(find neimeng_bringup)/config/storage.yaml"/>
+  </node>
+
+  <group if="$(arg enable_mqtt)">
+    <node pkg="mqtt_gateway" type="scheduled_mqtt_gateway.py" name="mqtt_gateway" output="screen" respawn="true" respawn_delay="3">
+      <rosparam command="load" file="$(find neimeng_bringup)/config/mqtt.yaml"/>
+      <rosparam command="load" file="$(arg device_config)"/>
+      <rosparam command="load" file="$(arg mqtt_credentials_file)"/>
+    </node>
+  </group>
+
+  <group if="$(arg enable_ui)">
+    <node pkg="inspection_ui" type="production_inspection_panel.py" name="inspection_panel" output="screen"/>
+  </group>
+</launch>
+
+

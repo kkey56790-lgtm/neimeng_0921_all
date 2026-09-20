@@ -1,0 +1,61 @@
+# 固定点位云台动作。设备连接参数在ptz.yaml。
+
+point_rules:
+  - id: "initial"
+    keywords: ["初始点", "原点", "待命点", "充电点"]
+    preset: "1"
+    speed: 1.0
+    home: false
+    sweep: false
+
+  - id: "start"
+    keywords: ["起始点", "起始"]
+    preset: "1"
+    speed: 1.0
+    home: false
+    sweep: false
+
+  - id: "cruise"
+    keywords: ["巡航点", "巡航"]
+    preset: "4"
+    speed: 1.0
+    home: false
+    sweep: false
+    sweep_profile: "inspection_fast"
+
+  - id: "preset4_interface"
+    keywords: ["预置点4", "4号预置点", "四号预置点"]
+    preset: "4"
+    speed: 1.0
+    home: false
+    sweep: false
+
+default_rule:
+  preset: "4"
+  speed: 1.0
+  home: false
+  sweep: false
+
+# 编号起始点映射到1号预置位。巡航点自动命令由等待随动入口过滤。
+
+points:
+  "初始点": {sequence: 0, preset: "1", speed: 1.0, home: false, sweep: false}
+  "起始点": {sequence: 0, preset: "1", speed: 1.0, home: false, sweep: false}
+  "巡航点": {sequence: 0, preset: "4", speed: 1.0, home: false, sweep: false, sweep_profile: "inspection_fast"}
+  "预置点4": {sequence: 0, preset: "4", speed: 1.0, home: false, sweep: false}
+
+sweep_profiles:
+  inspection_fast:
+    repeat: 1
+    steps:
+      - {direction: "left",  speed: 10, duration: 1.5, pause: 0.05}
+      - {direction: "right", speed: 10, duration: 3.0, pause: 0.05}
+      - {direction: "left",  speed: 10, duration: 1.5, pause: 0.05}
+
+  normal:
+    repeat: 1
+    steps:
+      - {direction: "left",  speed: 5, duration: 1.5, pause: 0.10}
+      - {direction: "right", speed: 5, duration: 3.0, pause: 0.10}
+      - {direction: "left",  speed: 5, duration: 1.5, pause: 0.10}
+

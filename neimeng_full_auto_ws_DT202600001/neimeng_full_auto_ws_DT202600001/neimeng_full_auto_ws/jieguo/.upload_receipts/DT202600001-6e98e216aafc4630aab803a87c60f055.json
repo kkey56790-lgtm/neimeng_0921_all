@@ -1,0 +1,100 @@
+{
+  "taskName": "MOVE_TO",
+  "objectId": "DT202600001-6e98e216aafc4630aab803a87c60f055",
+  "completedMs": 1789631493655,
+  "confirmation": "HTTP PUT success + MQTT PUBACK; not platform database ack",
+  "receipts": {
+    "MOVE_TO_1789631408696.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631408696.jpg",
+      "putCompletedMs": 1789631489261,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631489362
+    },
+    "MOVE_TO_1789631415313.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631415313.jpg",
+      "putCompletedMs": 1789631489624,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631489729
+    },
+    "MOVE_TO_1789631422993.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631422993.jpg",
+      "putCompletedMs": 1789631489977,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631490085
+    },
+    "MOVE_TO_1789631428550.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631428550.jpg",
+      "putCompletedMs": 1789631490351,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631490457
+    },
+    "MOVE_TO_1789631443355.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631443355.jpg",
+      "putCompletedMs": 1789631490717,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631490810
+    },
+    "MOVE_TO_1789631450772.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631450772.jpg",
+      "putCompletedMs": 1789631491063,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631491151
+    },
+    "MOVE_TO_1789631460976.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631460976.jpg",
+      "putCompletedMs": 1789631491417,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631491496
+    },
+    "MOVE_TO_1789631464064.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631464064.jpg",
+      "putCompletedMs": 1789631491748,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631491822
+    },
+    "MOVE_TO_1789631467095.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631467095.jpg",
+      "putCompletedMs": 1789631492068,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631492159
+    },
+    "MOVE_TO_1789631472320.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631472320.jpg",
+      "putCompletedMs": 1789631492395,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631492511
+    },
+    "MOVE_TO_1789631475495.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631475495.jpg",
+      "putCompletedMs": 1789631492766,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631492847
+    },
+    "MOVE_TO_1789631478738.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631478738.jpg",
+      "putCompletedMs": 1789631493154,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631493231
+    },
+    "MOVE_TO_1789631485550.jpg": {
+      "tid": "d9b7b7c8eece4ef491bbb70183bfced0",
+      "objectKey": "DT202600001/2026/09/17/DT202600001-6e98e216aafc4630aab803a87c60f055/MOVE_TO_1789631485550.jpg",
+      "putCompletedMs": 1789631493503,
+      "acknowledged": true,
+      "acknowledgedMs": 1789631493628
+    }
+  },
+  "missingFiles": []
+}

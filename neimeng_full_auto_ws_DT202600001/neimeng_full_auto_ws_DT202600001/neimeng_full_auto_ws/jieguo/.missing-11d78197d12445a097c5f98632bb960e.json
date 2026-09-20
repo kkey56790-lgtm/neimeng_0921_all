@@ -1,0 +1,99 @@
+{
+  "events": [
+    {
+      "timeMs": 1789466815757,
+      "missing": [
+        "任务000000000_1789464432286.jpg",
+        "任务000000000_1789464435345.jpg",
+        "任务000000000_1789464438407.jpg",
+        "任务000000000_d8b31796a9.txt"
+      ],
+      "record": {
+        "taskId": "2026-09-15 17:27:11:任务000000000",
+        "taskName": "任务000000000",
+        "objectId": "DT202600001-7e8787f8670441ecaafd302345fc94fa",
+        "state": "READY",
+        "images": [
+          "任务000000000_1789464432286.jpg",
+          "任务000000000_1789464435345.jpg",
+          "任务000000000_1789464438407.jpg"
+        ],
+        "hashes": {
+          "任务000000000_1789464432286.jpg": "b24eda831bcfb5816caa99b10de1237bafb04d25d70a04fcc8b4b6f83a4547fe",
+          "任务000000000_1789464435345.jpg": "e7becd45067ebc984f884e8ad0d0917dbaef3e6a32e6b90b8f5fba8d1da1b5a6",
+          "任务000000000_1789464438407.jpg": "967afe3d916b8dc2a230d3e98b5f9fb4309c9655646ef3c07bb5aa4a0a4722ca",
+          "任务000000000_d8b31796a9.txt": "5f0800006f9d78c59881a9c4b96fadc94079ba783843e7991c38d6c1f1f7cc1e"
+        },
+        "counts": {
+          "chocks": 0,
+          "tyre": 0,
+          "extinguisher": 1,
+          "plate": 0,
+          "tag": 0,
+          "light": 0,
+          "support": 0,
+          "screw": 0,
+          "tank": 0,
+          "truck": 0
+        },
+        "items": [
+          {
+            "id": 0,
+            "name": "chocks",
+            "display_name": "挡掩"
+          },
+          {
+            "id": 1,
+            "name": "tyre",
+            "display_name": "轮胎"
+          },
+          {
+            "id": 2,
+            "name": "extinguisher",
+            "display_name": "灭火器"
+          },
+          {
+            "id": 3,
+            "name": "plate",
+            "display_name": "车牌"
+          },
+          {
+            "id": 4,
+            "name": "tag",
+            "display_name": "检修牌"
+          },
+          {
+            "id": 5,
+            "name": "light",
+            "display_name": "车灯"
+          },
+          {
+            "id": 6,
+            "name": "support",
+            "display_name": "支护"
+          },
+          {
+            "id": 7,
+            "name": "screw",
+            "display_name": "轮毂螺丝"
+          },
+          {
+            "id": 8,
+            "name": "tank",
+            "display_name": "油箱"
+          },
+          {
+            "id": 9,
+            "name": "truck",
+            "display_name": "卡车"
+          }
+        ],
+        "content": "任务名：任务000000000\n挡掩：0\n轮胎：0\n灭火器：1\n车牌：0\n检修牌：0\n车灯：0\n支护：0\n轮毂螺丝：0\n油箱：0\n卡车：0\n",
+        "txt": "任务000000000_d8b31796a9.txt",
+        "uploadNames": {
+          "任务000000000_1789464432286.jpg": "任务000000000_1789464432286.jpg"
+        }
+      }
+    }
+  ]
+}

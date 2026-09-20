@@ -1,0 +1,24 @@
+broker_host: "222.187.130.102"
+broker_port: 1883
+keepalive: 30
+qos: 1
+
+robot_code: "DT202600001"
+robot_name: ""
+
+robot_http_ip: "192.168.2.100"
+robot_http_port: 7999
+# 0: no application-level HTTP timeout
+http_timeout: 0.0
+
+enable_voice_commands: true
+enable_state_announcer: true
+linear_threshold: 0.03
+angular_threshold: 0.08
+left_turn_positive: true
+
+repeat_inspecting: 15.0
+repeat_stopped: 15.0
+repeat_reversing: 6.0
+repeat_turning: 6.0
+repeat_avoiding: 6.0

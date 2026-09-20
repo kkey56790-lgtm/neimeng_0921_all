@@ -1,0 +1,24 @@
+host: "192.168.2.100"
+port: 7999
+http_timeout: 3.0
+pose_endpoint: "/sensor_data/base_data"
+points_endpoint: "/pose_manage/get_pose"
+map_endpoint: "/map_manage/current_map_info"
+frequency: 5.0
+reload_interval: 10.0
+approach_radius: 1.20
+arrival_radius: 0.45
+arrival_hold: 0.80
+leave_radius: 0.70
+max_linear_speed: 0.50
+max_angular_speed: 1.00
+# 非零速度必须持续续发；超过该时间未收到新指令自动停车。
+manual_move_timeout: 0.80
+# 任务运行或暂停时禁止切图，避免定位和任务地图不一致。
+allow_map_switch_while_busy: false
+map_switch_timeout: 12.0
+# true=按真实位姿自动到点；hardware_demo.launch 会覆盖为 false，只模拟触发信号。
+publish_point_events: true
+start_point_name: "起始点"
+# 任一关键词出现在点位名中，都视为起始点并重置一圈触发状态。
+start_point_keywords: ["起始点", "起始", "充电点", "待命点", "原点"]

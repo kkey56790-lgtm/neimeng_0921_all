@@ -1,0 +1,86 @@
+{
+  "events": [
+    {
+      "timeMs": 1789467760495,
+      "missing": [
+        "任务7_df451e41b3.txt"
+      ],
+      "record": {
+        "taskId": "2026-09-15 18:11:33:任务7",
+        "taskName": "任务7",
+        "objectId": "DT202600001-cd28e0308bb54bb7808efdadef5d4ea7",
+        "state": "READY",
+        "images": [],
+        "hashes": {
+          "任务7_df451e41b3.txt": "aa8c6daa45f761402630bee7da4c4797887d0a39f95a791e6a0a71747f69b280"
+        },
+        "counts": {
+          "chocks": 0,
+          "tyre": 0,
+          "extinguisher": 0,
+          "plate": 0,
+          "tag": 0,
+          "light": 0,
+          "support": 0,
+          "screw": 0,
+          "tank": 0,
+          "truck": 0
+        },
+        "items": [
+          {
+            "id": 0,
+            "name": "chocks",
+            "display_name": "挡掩"
+          },
+          {
+            "id": 1,
+            "name": "tyre",
+            "display_name": "轮胎"
+          },
+          {
+            "id": 2,
+            "name": "extinguisher",
+            "display_name": "灭火器"
+          },
+          {
+            "id": 3,
+            "name": "plate",
+            "display_name": "车牌"
+          },
+          {
+            "id": 4,
+            "name": "tag",
+            "display_name": "检修牌"
+          },
+          {
+            "id": 5,
+            "name": "light",
+            "display_name": "车灯"
+          },
+          {
+            "id": 6,
+            "name": "support",
+            "display_name": "支护"
+          },
+          {
+            "id": 7,
+            "name": "screw",
+            "display_name": "轮毂螺丝"
+          },
+          {
+            "id": 8,
+            "name": "tank",
+            "display_name": "油箱"
+          },
+          {
+            "id": 9,
+            "name": "truck",
+            "display_name": "卡车"
+          }
+        ],
+        "content": "任务名：任务7\n挡掩：0\n轮胎：0\n灭火器：0\n车牌：0\n检修牌：0\n车灯：0\n支护：0\n轮毂螺丝：0\n油箱：0\n卡车：0\n",
+        "txt": "任务7_df451e41b3.txt"
+      }
+    }
+  ]
+}

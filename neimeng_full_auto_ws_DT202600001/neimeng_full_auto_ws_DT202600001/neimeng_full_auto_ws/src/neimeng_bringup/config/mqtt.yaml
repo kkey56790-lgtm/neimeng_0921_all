@@ -1,0 +1,33 @@
+client_id: "{robot_code}-inspection"
+max_outbox: 10000
+completed_tid_cache: 1000
+
+# 文档正文要求约1Hz；需要2Hz时改为0.5。
+telemetry_interval: 1.0
+telemetry_stale_timeout: 3.0
+# false只上传固定巡航点的最终检测结果，避免同一检测重复上报。
+upload_lifecycle_events: false
+
+broker:
+  host: "222.187.130.102"
+  port: 1883
+  keepalive: 30
+
+tls:
+  enabled: false
+  ca_file: ""
+
+topics:
+  register: "thing/robot/insert"
+  command: "thing/robot/{robot_code}/services"
+  reply: "thing/robot/{robot_code}/services_reply"
+  telemetry: "thing/robot/{robot_code}/osd"
+  event: "thing/robot/{robot_code}/events"
+
+manual_control:
+  linear_speed: 0.30
+  angular_speed: 0.60
+
+command_mapping:
+  # 必须与上位机真实任务列表中的返航任务名称完全一致。
+  return_home_task: "自动返航"

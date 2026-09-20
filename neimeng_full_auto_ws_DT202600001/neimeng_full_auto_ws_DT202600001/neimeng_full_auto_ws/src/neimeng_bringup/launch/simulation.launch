@@ -1,0 +1,41 @@
+<launch>
+  <arg name="enable_mqtt" default="false"/>
+  <arg name="enable_ui" default="false"/>
+  <arg name="mqtt_credentials_file" default="$(find neimeng_bringup)/config/mqtt_credentials.yaml"/>
+  <!-- false=纯模拟云台；true=模拟底盘/检测，但控制真实ONVIF云台 -->
+  <arg name="real_ptz" default="false"/>
+
+  <node pkg="inspection_simulation" type="fake_robot.py" name="fake_robot" output="screen">
+    <rosparam command="load" file="$(find neimeng_bringup)/config/simulation.yaml"/>
+    <rosparam command="load" file="$(find neimeng_bringup)/config/device.yaml"/>
+  </node>
+  <node unless="$(arg real_ptz)" pkg="inspection_simulation" type="fake_ptz.py" name="fake_ptz" output="screen">
+    <param name="action_delay" value="0.5"/>
+  </node>
+
+  <node if="$(arg real_ptz)" pkg="ptz_control" type="ptz_controller.py" name="ptz_controller" output="screen">
+    <rosparam command="load" file="$(find neimeng_bringup)/config/ptz.yaml"/>
+  </node>
+
+  <node pkg="inspection_core" type="inspection_orchestrator.py" name="inspection_orchestrator" output="screen">
+    <rosparam command="load" file="$(find neimeng_bringup)/config/inspection.yaml"/>
+    <rosparam command="load" file="$(find neimeng_bringup)/config/device.yaml"/>
+    <param name="detection_collection_enabled" value="false"/>
+  </node>
+
+  <node pkg="inspection_core" type="result_store.py" name="result_store" output="screen">
+    <rosparam command="load" file="$(find neimeng_bringup)/config/storage.yaml"/>
+  </node>
+
+  <group if="$(arg enable_mqtt)">
+    <node pkg="mqtt_gateway" type="mqtt_gateway_node.py" name="mqtt_gateway" output="screen">
+      <rosparam command="load" file="$(find neimeng_bringup)/config/mqtt.yaml"/>
+      <rosparam command="load" file="$(find neimeng_bringup)/config/device.yaml"/>
+      <rosparam command="load" file="$(arg mqtt_credentials_file)"/>
+    </node>
+  </group>
+
+  <group if="$(arg enable_ui)">
+    <node pkg="inspection_ui" type="inspection_panel.py" name="inspection_panel" output="screen"/>
+  </group>
+</launch>

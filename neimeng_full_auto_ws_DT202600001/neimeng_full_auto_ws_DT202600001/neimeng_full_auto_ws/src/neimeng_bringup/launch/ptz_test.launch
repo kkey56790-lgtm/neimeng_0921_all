@@ -1,0 +1,6 @@
+<launch>
+  <!-- 第一阶段：只连接真实 ONVIF 云台，排除底盘、任务、YOLO、MQTT 干扰。 -->
+  <node pkg="ptz_control" type="ptz_controller.py" name="ptz_controller" output="screen">
+    <rosparam command="load" file="$(find neimeng_bringup)/config/ptz.yaml"/>
+  </node>
+</launch>

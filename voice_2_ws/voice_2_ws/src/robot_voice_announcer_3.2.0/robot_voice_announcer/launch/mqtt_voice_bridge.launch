@@ -1,0 +1,16 @@
+<launch>
+  <arg name="config" default="$(find robot_voice_announcer)/config/mqtt_bridge.yaml"/>
+  <arg name="credentials" default="$(find robot_voice_announcer)/config/mqtt_credentials.example.yaml"/>
+  <arg name="robot_code" default="DT202600001"/>
+
+  <node pkg="robot_voice_announcer"
+        type="mqtt_voice_bridge.py"
+        name="mqtt_voice_bridge"
+        output="screen"
+        respawn="true"
+        respawn_delay="3">
+    <rosparam command="load" file="$(arg config)"/>
+    <rosparam command="load" file="$(arg credentials)"/>
+    <param name="robot_code" value="$(arg robot_code)"/>
+  </node>
+</launch>

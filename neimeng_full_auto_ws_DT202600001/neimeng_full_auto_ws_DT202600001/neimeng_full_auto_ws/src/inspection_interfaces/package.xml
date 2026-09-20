@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>inspection_interfaces</name>
+  <version>1.0.0</version>
+  <description>Shared JSON protocol and topic names for the inspection system.</description>
+  <maintainer email="robot@example.com">Robot Team</maintainer>
+  <license>Proprietary</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+</package>

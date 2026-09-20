@@ -1,0 +1,219 @@
+{
+  "taskName": "任务11",
+  "objectId": "DT202600001-cfa8d280251e4d27a45cb5963b61fec5",
+  "completedMs": 1789544720899,
+  "confirmation": "HTTP PUT success + MQTT PUBACK; not platform database ack",
+  "receipts": {
+    "任务11_1789544464250.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544464250.jpg",
+      "putCompletedMs": 1789544709468,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544709548
+    },
+    "任务11_1789544468507.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544468507.jpg",
+      "putCompletedMs": 1789544709811,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544709929
+    },
+    "任务11_1789544471572.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544471572.jpg",
+      "putCompletedMs": 1789544710182,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544710284
+    },
+    "任务11_1789544474625.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544474625.jpg",
+      "putCompletedMs": 1789544710596,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544710715
+    },
+    "任务11_1789544477676.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544477676.jpg",
+      "putCompletedMs": 1789544711079,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544711181
+    },
+    "任务11_1789544481239.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544481239.jpg",
+      "putCompletedMs": 1789544711491,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544711598
+    },
+    "任务11_1789544484414.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544484414.jpg",
+      "putCompletedMs": 1789544711931,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544712047
+    },
+    "任务11_1789544487464.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544487464.jpg",
+      "putCompletedMs": 1789544712409,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544712523
+    },
+    "任务11_1789544490523.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544490523.jpg",
+      "putCompletedMs": 1789544712772,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544712897
+    },
+    "任务11_1789544493681.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544493681.jpg",
+      "putCompletedMs": 1789544713138,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544713252
+    },
+    "任务11_1789544496727.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544496727.jpg",
+      "putCompletedMs": 1789544713509,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544713594
+    },
+    "任务11_1789544499773.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544499773.jpg",
+      "putCompletedMs": 1789544713882,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544714006
+    },
+    "任务11_1789544502852.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544502852.jpg",
+      "putCompletedMs": 1789544714345,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544714490
+    },
+    "任务11_1789544505907.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544505907.jpg",
+      "putCompletedMs": 1789544714799,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544714914
+    },
+    "任务11_1789544508953.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544508953.jpg",
+      "putCompletedMs": 1789544715174,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544715289
+    },
+    "任务11_1789544512005.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544512005.jpg",
+      "putCompletedMs": 1789544715548,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544715709
+    },
+    "任务11_1789544515052.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544515052.jpg",
+      "putCompletedMs": 1789544716040,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544716171
+    },
+    "任务11_1789544518112.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544518112.jpg",
+      "putCompletedMs": 1789544716449,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544716544
+    },
+    "任务11_1789544521165.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544521165.jpg",
+      "putCompletedMs": 1789544716815,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544716908
+    },
+    "任务11_1789544524220.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544524220.jpg",
+      "putCompletedMs": 1789544717152,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544717245
+    },
+    "任务11_1789544529109.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544529109.jpg",
+      "putCompletedMs": 1789544717493,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544717595
+    },
+    "任务11_1789544532562.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544532562.jpg",
+      "putCompletedMs": 1789544717859,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544717974
+    },
+    "任务11_1789544559766.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544559766.jpg",
+      "putCompletedMs": 1789544718321,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544718414
+    },
+    "任务11_1789544572026.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544572026.jpg",
+      "putCompletedMs": 1789544718648,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544718729
+    },
+    "任务11_1789544583309.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544583309.jpg",
+      "putCompletedMs": 1789544718994,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544719078
+    },
+    "任务11_1789544630503.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544630503.jpg",
+      "putCompletedMs": 1789544719328,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544719413
+    },
+    "任务11_1789544659341.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544659341.jpg",
+      "putCompletedMs": 1789544719679,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544719778
+    },
+    "任务11_1789544667494.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544667494.jpg",
+      "putCompletedMs": 1789544720053,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544720146
+    },
+    "任务11_1789544671984.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544671984.jpg",
+      "putCompletedMs": 1789544720405,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544720478
+    },
+    "任务11_1789544701005.jpg": {
+      "tid": "d732a45d7d6d4a28bee744e970a4197a",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-cfa8d280251e4d27a45cb5963b61fec5/11_1789544701005.jpg",
+      "putCompletedMs": 1789544720779,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544720880
+    }
+  },
+  "missingFiles": []
+}

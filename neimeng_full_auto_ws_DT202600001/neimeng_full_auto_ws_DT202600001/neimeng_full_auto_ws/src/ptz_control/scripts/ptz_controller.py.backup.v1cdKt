@@ -1,0 +1,669 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+云台等待任务随动。
+
+1. 初始点/起始点动作继续由现有点位配置决定。
+2. 屏蔽巡航点自动触发。
+3. 底盘执行 ACTION_WAIT_TIME 且处于 STATE_DOING 时，
+   优先执行一次预置位扫描。
+4. STATE_PAUSE 不新触发扫描。
+5. 停止和手动控制可以中断自动动作。
+"""
+
+import copy
+import os
+import sys
+import time
+from collections import deque
+
+SOURCE_DIR = os.path.dirname(os.path.abspath(__file__))
+if SOURCE_DIR not in sys.path:
+    sys.path.insert(0, SOURCE_DIR)
+
+import rospy
+from std_msgs.msg import String
+
+from inspection_interfaces.protocol import (
+    Topics,
+    make_message,
+    new_id,
+    parse_message,
+)
+from ptz_controller import PTZController
+
+
+class WaitTaskPTZController(PTZController):
+    def __init__(self):
+        # 基类初始化时会启动工作线程，提前初始化调度成员。
+        self.normal_queue = deque()
+        self.wait_queue = deque()
+        self.current_command = None
+        self.wait_seen_key = None
+
+        config = rospy.get_param("~wait_scan", {})
+
+        self.wait_enabled = bool(config.get("enabled", True))
+        self.wait_task_type = str(
+            config.get("task_type", "ACTION_WAIT_TIME")
+        ).strip()
+
+        self.wait_presets = [
+            str(value)
+            for value in config.get(
+                "presets",
+                ["4", "5", "6", "4", "7", "8", "4"],
+            )
+        ]
+        self.wait_speed = float(config.get("speed", 1.0))
+        self.wait_settle = float(
+            config.get("settle_seconds", 3.0)
+        )
+        self.wait_pause = float(config.get("pause", 0.0))
+
+        # 如果底盘提供可靠的执行ID或步骤ID，可在配置中增加。
+        self.identity_fields = config.get(
+            "identity_fields",
+            ["main_task_name", "task_name"],
+        )
+
+        super().__init__()
+
+        self.task_subscriber = rospy.Subscriber(
+            Topics.TASK_STATUS,
+            String,
+            self._task_status,
+            queue_size=30,
+        )
+
+        rospy.loginfo(
+            "等待随动启动：task_type=%s，state=STATE_DOING，"
+            "预置位顺序=%s",
+            self.wait_task_type,
+            " -> ".join(self.wait_presets),
+        )
+
+    @staticmethod
+    def _field(data, path):
+        """读取嵌套字段，例如 task_arg.task_type。"""
+        value = data
+        for part in str(path).split("."):
+            if not isinstance(value, dict) or part not in value:
+                return None
+            value = value[part]
+        return value
+
+    @staticmethod
+    def _is_cruise_command(command):
+        """屏蔽巡航点自动动作，保留初始点、起始点和手动操作。"""
+        mode = str(command.get("mode", "auto")).lower()
+        if mode != "auto":
+            return False
+
+        point_name = str(
+            command.get("point_name", "")
+        ).replace(" ", "")
+
+        initial_words = (
+            "初始点",
+            "原点",
+            "待命点",
+            "充电点",
+            "起始点",
+            "起始",
+        )
+
+        if any(word in point_name for word in initial_words):
+            return False
+
+        return "巡航" in point_name
+
+    def _task_status(self, raw):
+        if not self.wait_enabled:
+            return
+
+        try:
+            message = parse_message(raw)
+
+            # 使用底盘桥接节点的实际状态，不使用其他节点的推测。
+            if message.get("source") != "robot_bridge":
+                return
+
+            data = message.get("data", {})
+            if not isinstance(data, dict):
+                return
+
+            # 启停命令回执可能没有状态字段，不能用于重置去重。
+            if "task_state" not in data:
+                return
+
+            state = str(
+                data.get("task_state", "")
+            ).strip()
+
+            task_arg = data.get("task_arg", {})
+            if not isinstance(task_arg, dict):
+                task_arg = {}
+
+            task_type = str(
+                data.get("task_type")
+                or task_arg.get("task_type")
+                or ""
+            ).strip()
+
+            with self.condition:
+                # 任务结束后，下次等待允许重新触发。
+                if state in (
+                    "STATE_FINISH",
+                    "STATE_CANCEL",
+                    "STATE_CANCELED",
+                    "STATE_FAIL",
+                    "STATE_FAILED",
+                    "STATE_IDLE",
+                ):
+                    self.wait_seen_key = None
+                    return
+
+                # 暂停时不启动扫描，也不清空已有去重记录。
+                if state != "STATE_DOING":
+                    if (
+                        state == "STATE_PAUSE"
+                        and task_type == self.wait_task_type
+                    ):
+                        rospy.loginfo_throttle(
+                            10.0,
+                            "当前是等待步骤，但底盘已暂停；"
+                            "恢复STATE_DOING后才新触发云台扫描",
+                        )
+                    return
+
+                # 空类型无法判断，保留去重状态。
+                if not task_type:
+                    return
+
+                # 已进入其他运行步骤，结束上一等待的去重周期。
+                if task_type != self.wait_task_type:
+                    self.wait_seen_key = None
+                    return
+
+                key = tuple(
+                    str(self._field(data, field))
+                    for field in self.identity_fields
+                ) + (task_type,)
+
+                if key == self.wait_seen_key:
+                    return
+
+                # 手动模式下不由底盘任务夺回控制权。
+                if self.mode != "auto":
+                    return
+
+                if not self.wait_presets:
+                    raise ValueError("wait_scan.presets不能为空")
+
+                command = make_message(
+                    "ptz.command",
+                    source="wait_task_ptz",
+                    command_id=new_id("wait-scan"),
+                    action="sweep",
+                    mode="auto",
+                    data={
+                        "repeat": 1,
+                        "steps": [
+                            {
+                                "preset": preset,
+                                "speed": self.wait_speed,
+                                "settle_seconds": self.wait_settle,
+                                "pause": self.wait_pause,
+                            }
+                            for preset in self.wait_presets
+                        ],
+                    },
+                )
+                command["_wait_scan"] = True
+
+                self.wait_seen_key = key
+                self.wait_queue.append(command)
+
+                # 等待扫描优先于当前普通自动动作。
+                # 普通动作稍后从头重做。
+                current = self.current_command
+                if (
+                    current is not None
+                    and not current.get("_wait_scan", False)
+                    and current.get("mode", "auto") == "auto"
+                    and not current.get("_requeue", False)
+                ):
+                    current["_requeue"] = True
+                    self.version += 1
+
+                self.condition.notify_all()
+
+            self._publish_result(command, "accepted")
+            rospy.loginfo(
+                "底盘等待步骤触发云台：主任务=%s，"
+                "类型=%s，顺序=%s",
+                data.get("main_task_name", ""),
+                task_type,
+                " -> ".join(self.wait_presets),
+            )
+
+        except Exception as exc:
+            rospy.logerr("等待任务解析失败: %s", exc)
+
+    def _clear_queues_locked(self, reason):
+        """调用者必须持有condition锁。"""
+        commands = (
+            list(self.normal_queue)
+            + list(self.wait_queue)
+        )
+        self.normal_queue.clear()
+        self.wait_queue.clear()
+
+        if self.current_command is not None:
+            self.current_command["_requeue"] = False
+
+        for command in commands:
+            self._publish_result(
+                command, "cancelled", reason
+            )
+
+    def _command(self, raw):
+        command = None
+
+        try:
+            command = copy.deepcopy(parse_message(raw))
+            action = str(
+                command.get(
+                    "action",
+                    command.get("method", ""),
+                )
+            ).lower()
+            command["action"] = action
+
+            with self.condition:
+                # stop优先，不受巡航点过滤影响。
+                if action == "stop":
+                    self.version += 1
+                    self._clear_queues_locked("stopped")
+                    self._require_driver().stop()
+                    self.device_state = "STOPPED"
+                    self.condition.notify_all()
+                    self._publish_result(command, "success")
+                    return
+
+                if self._is_cruise_command(command):
+                    self._publish_result(
+                        command,
+                        "rejected",
+                        "巡航点自动触发已关闭；"
+                        "扫描由底盘ACTION_WAIT_TIME触发",
+                    )
+                    return
+
+                if action == "mode":
+                    target = str(
+                        command.get("data", {}).get(
+                            "mode", "auto"
+                        )
+                    ).lower()
+
+                    if target not in ("auto", "manual"):
+                        raise ValueError(
+                            "mode must be auto or manual"
+                        )
+
+                    # 重复auto指令不打断等待扫描。
+                    if target != self.mode:
+                        self.version += 1
+                        self._clear_queues_locked(
+                            "mode changed"
+                        )
+                        self._require_driver().stop()
+                        self.mode = target
+                        self.condition.notify_all()
+
+                    self._publish_result(
+                        command, "success"
+                    )
+                    self._publish_health("online")
+                    return
+
+                if action not in (
+                    "goto_preset",
+                    "home",
+                    "move",
+                    "sweep",
+                ):
+                    raise ValueError(
+                        "unsupported PTZ action: " + action
+                    )
+
+                requested_mode = str(
+                    command.get("mode", "auto")
+                ).lower()
+                command["mode"] = requested_mode
+
+                if requested_mode not in ("auto", "manual"):
+                    raise ValueError(
+                        "mode must be auto or manual"
+                    )
+
+                if requested_mode == "manual":
+                    self.version += 1
+                    self._clear_queues_locked(
+                        "manual override"
+                    )
+                    self._require_driver().stop()
+                    self.mode = "manual"
+
+                elif self.mode == "manual":
+                    self._publish_result(
+                        command,
+                        "rejected",
+                        "PTZ is in manual mode",
+                    )
+                    return
+
+                self.normal_queue.append(command)
+                self.condition.notify_all()
+
+            self._publish_result(command, "accepted")
+
+        except Exception as exc:
+            rospy.logerr("PTZ命令处理失败: %s", exc)
+            if command is not None:
+                self._publish_result(
+                    command, "failed", str(exc)
+                )
+
+    def _wait(self, seconds, version):
+        end = time.monotonic() + max(
+            0.0, float(seconds)
+        )
+
+        while self._valid(version):
+            remaining = end - time.monotonic()
+            if remaining <= 0:
+                return True
+            time.sleep(min(0.05, remaining))
+
+        return False
+
+    def _goto_and_wait(
+        self, preset, speed, seconds, version
+    ):
+        with self.condition:
+            if not self._valid(version):
+                raise InterruptedError("superseded")
+
+            self._require_driver()
+            self.driver.stop()
+            self.driver.goto_preset(
+                str(preset),
+                max(0.1, min(float(speed), 1.0)),
+            )
+            self.last_preset = str(preset)
+            self.device_state = "MOVING_TO_PRESET"
+
+        if not self._wait(seconds, version):
+            raise InterruptedError("superseded")
+
+        self._refresh_position()
+        self.device_state = "PRESET_READY"
+
+    def _direction_move(self, step, version):
+        direction = str(
+            step.get("direction", "")
+        ).lower()
+
+        if direction not in self.DIRECTIONS:
+            raise ValueError(
+                "invalid sweep direction: " + direction
+            )
+
+        speed = max(
+            0.1,
+            min(float(step.get("speed", 5)) / 10.0, 1.0),
+        )
+        pan, tilt = self.DIRECTIONS[direction]
+
+        with self.condition:
+            if not self._valid(version):
+                raise InterruptedError("superseded")
+
+            self._require_driver()
+            self.driver.move(pan * speed, tilt * speed)
+
+        try:
+            if not self._wait(
+                step.get("duration", 1.0), version
+            ):
+                raise InterruptedError("superseded")
+        finally:
+            self.driver.stop()
+
+    def _execute(self, command):
+        action = command["action"]
+        data = command.get("data", {})
+        version = command["_version"]
+
+        if action == "goto_preset":
+            self._goto_and_wait(
+                data.get("preset", "1"),
+                data.get("speed", self.preset_speed),
+                data.get(
+                    "settle_seconds", self.default_settle
+                ),
+                version,
+            )
+            return
+
+        if action == "sweep":
+            self._require_driver()
+
+            steps = data.get("steps") or self.default_steps
+            repeat = max(
+                1, int(data.get("repeat", 1))
+            )
+
+            for _ in range(repeat):
+                for step in steps:
+                    if "preset" in step:
+                        preset = str(
+                            step["preset"]
+                        ).strip()
+
+                        if not preset:
+                            raise ValueError(
+                                "empty preset in sweep step"
+                            )
+
+                        self._goto_and_wait(
+                            preset,
+                            step.get(
+                                "speed", self.preset_speed
+                            ),
+                            step.get(
+                                "settle_seconds",
+                                self.default_settle,
+                            ),
+                            version,
+                        )
+                    else:
+                        self._direction_move(step, version)
+
+                    if not self._wait(
+                        step.get("pause", 0.0), version
+                    ):
+                        raise InterruptedError("superseded")
+
+            self._refresh_position()
+            self.device_state = "SCAN_FINISHED"
+            return
+
+        if action == "move":
+            direction = str(
+                data.get("direction", "stop")
+            ).lower()
+
+            with self.condition:
+                if not self._valid(version):
+                    raise InterruptedError("superseded")
+
+                self._require_driver()
+
+                if (
+                    direction == "stop"
+                    or not data.get("start", True)
+                ):
+                    self.driver.stop()
+                    self.device_state = "STOPPED"
+                else:
+                    if direction not in self.DIRECTIONS:
+                        raise ValueError(
+                            "invalid direction: " + direction
+                        )
+
+                    speed = max(
+                        0.1,
+                        min(
+                            float(data.get("speed", 5)) / 10.0,
+                            1.0,
+                        ),
+                    )
+                    pan, tilt = self.DIRECTIONS[direction]
+
+                    self.driver.move(
+                        pan * speed, tilt * speed
+                    )
+                    self.device_state = (
+                        "MOVING_" + direction.upper()
+                    )
+            return
+
+        if action == "home":
+            with self.condition:
+                if not self._valid(version):
+                    raise InterruptedError("superseded")
+
+                self._require_driver()
+                self.driver.stop()
+                self.last_preset = str(
+                    data.get("preset", "1")
+                )
+
+                try:
+                    self.driver.goto_preset(
+                        self.last_preset,
+                        data.get(
+                            "speed", self.preset_speed
+                        ),
+                    )
+                except Exception:
+                    self.driver.home()
+
+            if not self._wait(
+                data.get(
+                    "settle_seconds", self.default_settle
+                ),
+                version,
+            ):
+                raise InterruptedError("superseded")
+
+            self._refresh_position()
+            self.device_state = "HOME_READY"
+            return
+
+        raise ValueError(
+            "unsupported PTZ action: " + action
+        )
+
+    def _worker(self):
+        while not rospy.is_shutdown():
+            with self.condition:
+                while (
+                    not self.wait_queue
+                    and not self.normal_queue
+                    and not rospy.is_shutdown()
+                ):
+                    self.condition.wait(timeout=0.5)
+
+                if rospy.is_shutdown():
+                    return
+
+                if self.wait_queue:
+                    command = self.wait_queue.popleft()
+                else:
+                    command = self.normal_queue.popleft()
+
+                self.version += 1
+                command["_version"] = self.version
+                command["_requeue"] = False
+                self.current_command = command
+
+            try:
+                self._execute(command)
+
+                with self.condition:
+                    if not self._valid(command["_version"]):
+                        raise InterruptedError("superseded")
+
+                    self._publish_result(
+                        command, "success"
+                    )
+
+            except InterruptedError:
+                try:
+                    if self.driver is not None:
+                        self.driver.stop()
+                except Exception:
+                    pass
+
+                with self.condition:
+                    if (
+                        command.get("_requeue", False)
+                        and self.mode == "auto"
+                        and not rospy.is_shutdown()
+                    ):
+                        command.pop("_version", None)
+                        command["_requeue"] = False
+                        self.normal_queue.appendleft(command)
+
+                        rospy.loginfo(
+                            "普通动作让位于等待扫描，"
+                            "扫描结束后重新执行"
+                        )
+                    else:
+                        self._publish_result(
+                            command,
+                            "cancelled",
+                            "superseded",
+                        )
+
+            except Exception as exc:
+                try:
+                    if self.driver is not None:
+                        self.driver.stop()
+                except Exception:
+                    pass
+
+                self.device_state = "ERROR"
+                rospy.logerr("云台动作失败: %s", exc)
+
+                self._publish_result(
+                    command, "failed", str(exc)
+                )
+                self._publish_health("error", str(exc))
+
+            finally:
+                with self.condition:
+                    self.current_command = None
+                    self.condition.notify_all()
+
+
+if __name__ == "__main__":
+    rospy.init_node("ptz_controller")
+    WaitTaskPTZController()
+    rospy.spin()

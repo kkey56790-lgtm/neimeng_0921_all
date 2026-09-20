@@ -1,0 +1,9 @@
+<launch>
+  <!-- 第二阶段：只测试真实底盘HTTP和UI，不启动云台、巡检决策、YOLO、MQTT。 -->
+  <node pkg="robot_base_bridge" type="robot_bridge.py" name="robot_bridge" output="screen">
+    <rosparam command="load" file="$(find neimeng_bringup)/config/robot.yaml"/>
+    <param name="publish_point_events" value="false"/>
+  </node>
+
+  <node pkg="inspection_ui" type="inspection_panel.py" name="inspection_panel" output="screen"/>
+</launch>

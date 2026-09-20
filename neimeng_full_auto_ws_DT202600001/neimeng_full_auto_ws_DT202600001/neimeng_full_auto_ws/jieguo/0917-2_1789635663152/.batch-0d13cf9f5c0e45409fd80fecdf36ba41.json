@@ -1,0 +1,89 @@
+{
+  "taskId": "2026-09-17 17:01:02:0917-2",
+  "taskName": "0917-2",
+  "objectId": "DT202600001-45e19360105a4db2a7a41aa5ef8efc9a",
+  "createdMs": 1789635663152,
+  "managedDirectory": true,
+  "state": "READY",
+  "images": [
+    "0917-2_1789635663198.jpg",
+    "0917-2_1789635666212.jpg",
+    "0917-2_1789635669242.jpg",
+    "0917-2_1789635675559.jpg"
+  ],
+  "hashes": {
+    "0917-2_1789635663198.jpg": "aa89fa99fce71c88b633adf9bb92ea4c682fac99659c097f844097ac5bf36586",
+    "0917-2_1789635666212.jpg": "46503d910d2ca843f9dbb31895f6cae9a2bf29cb03bb6303c4ce29d356d4b019",
+    "0917-2_1789635669242.jpg": "21c0f014bfced1c5d71fcf9fa4deabcdfbcf6a4b8b5843a58fdc36e16d05cb61",
+    "0917-2_1789635675559.jpg": "909a89d4c326765b804c6b9b2abf0bd3f6c9e8724dd2b234546df010a3e840ec",
+    "0917-2.txt": "5e5cff0a390d3a5ba9a0e24a91dda53ad167c6d6e19b76fd29694a8a558710ef"
+  },
+  "txt": "0917-2.txt",
+  "counts": {
+    "chocks": 0,
+    "tyre": 1,
+    "extinguisher": 1,
+    "plate": 0,
+    "tag": 0,
+    "light": 0,
+    "support": 1,
+    "screw": 0,
+    "tank": 0,
+    "truck": 0
+  },
+  "items": [
+    {
+      "id": 0,
+      "name": "chocks",
+      "display_name": "挡掩"
+    },
+    {
+      "id": 1,
+      "name": "tyre",
+      "display_name": "轮胎"
+    },
+    {
+      "id": 2,
+      "name": "extinguisher",
+      "display_name": "灭火器"
+    },
+    {
+      "id": 3,
+      "name": "plate",
+      "display_name": "车牌"
+    },
+    {
+      "id": 4,
+      "name": "tag",
+      "display_name": "检修牌"
+    },
+    {
+      "id": 5,
+      "name": "light",
+      "display_name": "车灯"
+    },
+    {
+      "id": 6,
+      "name": "support",
+      "display_name": "支护"
+    },
+    {
+      "id": 7,
+      "name": "screw",
+      "display_name": "轮毂螺丝"
+    },
+    {
+      "id": 8,
+      "name": "tank",
+      "display_name": "油箱"
+    },
+    {
+      "id": 9,
+      "name": "truck",
+      "display_name": "卡车"
+    }
+  ],
+  "content": "任务名：0917-2\n挡掩：0\n轮胎：1\n灭火器：1\n车牌：0\n检修牌：0\n车灯：0\n支护：1\n轮毂螺丝：0\n油箱：0\n卡车：0\n",
+  "finishReason": "task_changed",
+  "finishedMs": 1789635683185
+}

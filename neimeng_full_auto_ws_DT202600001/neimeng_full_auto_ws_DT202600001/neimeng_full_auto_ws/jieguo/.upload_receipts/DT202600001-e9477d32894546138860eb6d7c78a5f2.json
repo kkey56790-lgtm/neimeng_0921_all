@@ -1,0 +1,93 @@
+{
+  "taskName": "任务1",
+  "objectId": "DT202600001-e9477d32894546138860eb6d7c78a5f2",
+  "completedMs": 1789528053651,
+  "confirmation": "HTTP PUT success + MQTT PUBACK; not platform database ack",
+  "receipts": {
+    "extinguisher_count_1_frame_00009814_000000392152ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243600.jpg",
+      "putCompletedMs": 1789528045341,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528045421
+    },
+    "light_count_1_frame_00009901_000000395629ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243606.jpg",
+      "putCompletedMs": 1789528046250,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528046336
+    },
+    "light_count_2_frame_00010076_000000402621ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243618.jpg",
+      "putCompletedMs": 1789528046764,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528046860
+    },
+    "light_count_3_frame_00010134_000000404939ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243621.jpg",
+      "putCompletedMs": 1789528047412,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528047511
+    },
+    "light_count_4_frame_00010149_000000405538ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243625.jpg",
+      "putCompletedMs": 1789528048104,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528048193
+    },
+    "light_count_5_frame_00010551_000000421602ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243629.jpg",
+      "putCompletedMs": 1789528048853,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528048951
+    },
+    "plate_count_1_frame_00006173_000000246663ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243633.jpg",
+      "putCompletedMs": 1789528049434,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528049532
+    },
+    "support_count_1_frame_00000695_000000027771ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243637.jpg",
+      "putCompletedMs": 1789528050536,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528050633
+    },
+    "tag_count_1_frame_00009804_000000391753ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243640.jpg",
+      "putCompletedMs": 1789528051278,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528051385
+    },
+    "tank_count_1_frame_00009382_000000374890ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243643.jpg",
+      "putCompletedMs": 1789528051999,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528052076
+    },
+    "tyre_count_1_frame_00000397_000000015863ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243651.jpg",
+      "putCompletedMs": 1789528052813,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528052906
+    },
+    "tyre_count_2_frame_00011930_000000476705ms.jpg": {
+      "tid": "20267b9588b14bc283e92ffcaa7fd8cd",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-e9477d32894546138860eb6d7c78a5f2/1_1789527243654.jpg",
+      "putCompletedMs": 1789528053543,
+      "acknowledged": true,
+      "acknowledgedMs": 1789528053625
+    }
+  },
+  "missingFiles": []
+}

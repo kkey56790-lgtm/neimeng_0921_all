@@ -1,0 +1,58 @@
+{
+  "taskName": "任务7",
+  "objectId": "DT202600001-21e2ff4a9e5545bea7730fb21ee80744",
+  "completedMs": 1789544416747,
+  "confirmation": "HTTP PUT success + MQTT PUBACK; not platform database ack",
+  "receipts": {
+    "任务7_1789544393188.jpg": {
+      "tid": "ba2c98e39a924433b6eda3139362bfd8",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-21e2ff4a9e5545bea7730fb21ee80744/7_1789544393188.jpg",
+      "putCompletedMs": 1789544414202,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544414319
+    },
+    "任务7_1789544396211.jpg": {
+      "tid": "ba2c98e39a924433b6eda3139362bfd8",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-21e2ff4a9e5545bea7730fb21ee80744/7_1789544396211.jpg",
+      "putCompletedMs": 1789544414665,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544414762
+    },
+    "任务7_1789544399283.jpg": {
+      "tid": "ba2c98e39a924433b6eda3139362bfd8",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-21e2ff4a9e5545bea7730fb21ee80744/7_1789544399283.jpg",
+      "putCompletedMs": 1789544415050,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544415139
+    },
+    "任务7_1789544402330.jpg": {
+      "tid": "ba2c98e39a924433b6eda3139362bfd8",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-21e2ff4a9e5545bea7730fb21ee80744/7_1789544402330.jpg",
+      "putCompletedMs": 1789544415441,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544415545
+    },
+    "任务7_1789544405361.jpg": {
+      "tid": "ba2c98e39a924433b6eda3139362bfd8",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-21e2ff4a9e5545bea7730fb21ee80744/7_1789544405361.jpg",
+      "putCompletedMs": 1789544415786,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544415906
+    },
+    "任务7_1789544408441.jpg": {
+      "tid": "ba2c98e39a924433b6eda3139362bfd8",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-21e2ff4a9e5545bea7730fb21ee80744/7_1789544408441.jpg",
+      "putCompletedMs": 1789544416165,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544416296
+    },
+    "任务7_1789544411504.jpg": {
+      "tid": "ba2c98e39a924433b6eda3139362bfd8",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-21e2ff4a9e5545bea7730fb21ee80744/7_1789544411504.jpg",
+      "putCompletedMs": 1789544416621,
+      "acknowledged": true,
+      "acknowledgedMs": 1789544416736
+    }
+  },
+  "missingFiles": []
+}

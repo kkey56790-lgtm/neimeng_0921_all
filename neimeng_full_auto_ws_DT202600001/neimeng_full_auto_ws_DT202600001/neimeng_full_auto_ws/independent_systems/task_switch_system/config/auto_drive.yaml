@@ -1,0 +1,78 @@
+# 自动行驶、任务切换、回充与障碍处理。
+
+pause_on_arrival: false
+
+# 台位分支任务完成后，等待此时间再重新启动本轮主干道任务。
+
+branch:
+  restart_delay: 0.8
+
+# 仅用于云台动作。匹配顺序：精确点位覆盖 > 关键词首次匹配 > 默认规则。
+# 云台随车点位规则，按顺序匹配；预置点速度1.0为设备允许的最高速度。
+
+arrival_tasks:
+  "起始点01": {enabled: false, task_name: "", stop_before_start: true, return_to_main_task: true, loop_time: 1}
+  "起始点02": {enabled: false, task_name: "", stop_before_start: true, return_to_main_task: true, loop_time: 1}
+  "起始点03": {enabled: false, task_name: "", stop_before_start: true, return_to_main_task: true, loop_time: 1}
+  "起始点04": {enabled: false, task_name: "", stop_before_start: true, return_to_main_task: true, loop_time: 1}
+
+# 有车/无车信号的独立任务规则，不检查云台状态，也不要求先模拟到达。
+
+vehicle_task_rules:
+  "起始点01":
+    on_vehicle: {action: "start_task", task_name: "台位1", stop_before_start: true, return_to_main_task: true}
+    on_empty: {action: "continue"}
+    on_error: {action: "none"}
+  "起始点02":
+    on_vehicle: {action: "start_task", task_name: "台位2", stop_before_start: true, return_to_main_task: true}
+    on_empty: {action: "continue"}
+    on_error: {action: "none"}
+  "起始点03":
+    on_vehicle: {action: "start_task", task_name: "台位3", stop_before_start: true, return_to_main_task: true}
+    on_empty: {action: "continue"}
+    on_error: {action: "none"}
+  "起始点04":
+    on_vehicle: {action: "start_task", task_name: "台位4", stop_before_start: true, return_to_main_task: true}
+    on_empty: {action: "continue"}
+    on_error: {action: "none"}
+  "台位1左":
+    on_vehicle: {action: "start_task", task_name: "台位1有车任务", stop_before_start: true}
+    on_empty: {action: "start_task", task_name: "台位1无车任务", stop_before_start: true}
+    on_error: {action: "none"}
+  "台位2左":
+    on_vehicle: {action: "continue"}
+    on_empty: {action: "continue"}
+    on_error: {action: "none"}
+  "台位3右":
+    on_vehicle: {action: "start_task", task_name: "台位3有车任务", stop_before_start: true}
+    on_empty: {action: "continue"}
+    on_error: {action: "none"}
+
+vehicle_default_rule:
+  on_vehicle: {action: "none"}
+  on_empty: {action: "none"}
+  on_error: {action: "none"}
+
+# 真实YOLO采集点，与云台动作和到点任务并行。manual-detection模式会由launch整体关闭。
+
+voice_events:
+  task_started: ""
+  point_arrived: ""
+  vehicle_present: ""
+  vehicle_absent: ""
+  detection_error: ""
+  task_finished: ""
+
+numbered_flow:
+  max_task_number: 10
+  low_battery_threshold: 30.0
+  charge_target: 80.0
+  recharge_task_keywords: ["回充", "充电", "返航充电"]
+  task_switch_delay: 0.8
+  obstacle_timeout: 5.0
+  reverse_speed: 0.15
+  reverse_duration: 2.0
+  reverse_wait_for_start_point: true
+  # 实测安全策略：无车结论只恢复当前任务，不立即跳到下一个编号任务。
+  # 确认模型稳定后，如需“无车即跳过”，再改为 true。
+  advance_on_empty: false

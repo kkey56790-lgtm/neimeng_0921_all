@@ -1,0 +1,22 @@
+# Local dependencies and generated files
+.rknn_inspect_deps/
+.github-upload/
+__pycache__/
+*.py[cod]
+build/
+build_*/
+devel/
+devel_*/
+install/
+log/
+logs/
+.pytest_cache/
+node_modules/
+# Local credentials: retain example configurations
+*.env
+.env
+.env.*
+!.env.example
+mqtt_credentials.yaml
+*.pem
+*.key

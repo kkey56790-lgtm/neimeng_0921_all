@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.0.2)
+project(inspection_ui)
+find_package(catkin REQUIRED COMPONENTS rospy std_msgs inspection_interfaces)
+catkin_package(CATKIN_DEPENDS rospy std_msgs inspection_interfaces)
+catkin_install_python(PROGRAMS
+  scripts/inspection_panel.py
+  scripts/production_inspection_panel.py
+  scripts/full_auto_test_panel.py
+  scripts/full_auto_map_test_panel.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

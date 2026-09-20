@@ -1,0 +1,16 @@
+{
+  "taskName": "任务7",
+  "objectId": "DT202600001-38fb990ca78b45308f55d377abd76b97",
+  "completedMs": 1789529504657,
+  "confirmation": "HTTP PUT success + MQTT PUBACK; not platform database ack",
+  "receipts": {
+    "任务7_1789528726825.jpg": {
+      "tid": "4ad3585749a4436a844a6d301961641b",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-38fb990ca78b45308f55d377abd76b97/7_1789528726825.jpg",
+      "putCompletedMs": 1789529504560,
+      "acknowledged": true,
+      "acknowledgedMs": 1789529504648
+    }
+  },
+  "missingFiles": []
+}

@@ -1,0 +1,2 @@
+- best_truck.rknn 已随模块复制，可用 `bash run.sh rknn`。
+- yolov8n.rknn 当前原项目中不存在；使用YOLOv8前请放到本目录，再执行 `bash run.sh yolov8`。

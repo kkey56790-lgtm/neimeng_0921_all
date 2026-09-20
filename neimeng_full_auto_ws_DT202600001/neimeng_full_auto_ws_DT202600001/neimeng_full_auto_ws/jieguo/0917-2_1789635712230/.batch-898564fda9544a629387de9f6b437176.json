@@ -1,0 +1,87 @@
+{
+  "taskId": "2026-09-17 17:01:51:0917-2",
+  "taskName": "0917-2",
+  "objectId": "DT202600001-2af6e04d10cf42979005eca50c1f1682",
+  "createdMs": 1789635712230,
+  "managedDirectory": true,
+  "state": "READY",
+  "images": [
+    "0917-2_1789635715761.jpg",
+    "0917-2_1789635719182.jpg",
+    "0917-2_1789635722234.jpg"
+  ],
+  "hashes": {
+    "0917-2_1789635715761.jpg": "9e7a59352d2a388dc5e9572f7637b7717769e3d46988aee4963fca854725f429",
+    "0917-2_1789635719182.jpg": "57e48419fb7698043187045607329ab904253f7202480c41a063c03ce05c1578",
+    "0917-2_1789635722234.jpg": "792b6b8191b61db497d7df9009b631b2a9b62a7261d0bfbbacb49f5f967798af",
+    "0917-2.txt": "fd370b48812d484daf76fdfcfbd6e1c3ed31bae04640afea7f5ee431aaa33fe1"
+  },
+  "txt": "0917-2.txt",
+  "counts": {
+    "chocks": 0,
+    "tyre": 1,
+    "extinguisher": 0,
+    "plate": 0,
+    "tag": 0,
+    "light": 0,
+    "support": 1,
+    "screw": 0,
+    "tank": 0,
+    "truck": 0
+  },
+  "items": [
+    {
+      "id": 0,
+      "name": "chocks",
+      "display_name": "挡掩"
+    },
+    {
+      "id": 1,
+      "name": "tyre",
+      "display_name": "轮胎"
+    },
+    {
+      "id": 2,
+      "name": "extinguisher",
+      "display_name": "灭火器"
+    },
+    {
+      "id": 3,
+      "name": "plate",
+      "display_name": "车牌"
+    },
+    {
+      "id": 4,
+      "name": "tag",
+      "display_name": "检修牌"
+    },
+    {
+      "id": 5,
+      "name": "light",
+      "display_name": "车灯"
+    },
+    {
+      "id": 6,
+      "name": "support",
+      "display_name": "支护"
+    },
+    {
+      "id": 7,
+      "name": "screw",
+      "display_name": "轮毂螺丝"
+    },
+    {
+      "id": 8,
+      "name": "tank",
+      "display_name": "油箱"
+    },
+    {
+      "id": 9,
+      "name": "truck",
+      "display_name": "卡车"
+    }
+  ],
+  "content": "任务名：0917-2\n挡掩：0\n轮胎：1\n灭火器：0\n车牌：0\n检修牌：0\n车灯：0\n支护：1\n轮毂螺丝：0\n油箱：0\n卡车：0\n",
+  "finishReason": "task_changed",
+  "finishedMs": 1789635722387
+}

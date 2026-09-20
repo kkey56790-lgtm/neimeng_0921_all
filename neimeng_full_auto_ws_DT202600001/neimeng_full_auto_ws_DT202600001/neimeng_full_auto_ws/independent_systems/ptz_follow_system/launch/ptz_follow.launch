@@ -1,0 +1,20 @@
+<launch>
+  <arg name="enable_robot_bridge" default="true"/>
+
+  <group if="$(arg enable_robot_bridge)">
+    <node pkg="ptz_follow_system" type="safe_robot_bridge.py" name="robot_bridge" output="screen" respawn="true" respawn_delay="3">
+      <rosparam command="load" file="$(find ptz_follow_system)/config/robot.yaml"/>
+      <rosparam command="load" file="$(find ptz_follow_system)/config/robot_safe.yaml"/>
+      <rosparam command="load" file="$(find ptz_follow_system)/config/device.yaml"/>
+    </node>
+  </group>
+
+  <node pkg="ptz_follow_system" type="ptz_follow_adapter.py" name="ptz_follow_adapter" output="screen">
+    <rosparam command="load" file="$(find ptz_follow_system)/config/ptz_points.yaml"/>
+  </node>
+
+  <node pkg="ptz_follow_system" type="full_auto_ptz_controller.py" name="ptz_controller" output="screen" respawn="true" respawn_delay="3">
+    <rosparam command="load" file="$(find ptz_follow_system)/config/ptz.yaml"/>
+    <rosparam command="load" file="$(find ptz_follow_system)/config/ptz_points.yaml"/>
+  </node>
+</launch>

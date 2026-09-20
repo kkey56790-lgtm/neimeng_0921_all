@@ -1,0 +1,19 @@
+# 真实编号巡检状态机。任务名允许区域前缀，编号关键词必须包含“任务N”。
+numbered_flow:
+  max_task_number: 10
+  low_battery_threshold: 30.0
+  charge_target: 80.0
+  # 会在真实上位机任务目录中按关键词查找；区域前缀优先沿用当前任务区域。
+  recharge_task_keywords: ["回充", "充电", "返航充电"]
+  task_switch_delay: 0.8
+  obstacle_timeout: 5.0
+  reverse_speed: 0.15
+  reverse_duration: 2.0
+  # 倒车HTTP成功后仍等待真实位姿重新到达本任务起始点，再发布完成并续接下一任务。
+  reverse_wait_for_start_point: true
+  advance_on_empty: false
+
+# 每个起始点采集truck的时间；非“起始点N”不会启动YOLO采集。
+detection:
+  collect_seconds: 6.0
+

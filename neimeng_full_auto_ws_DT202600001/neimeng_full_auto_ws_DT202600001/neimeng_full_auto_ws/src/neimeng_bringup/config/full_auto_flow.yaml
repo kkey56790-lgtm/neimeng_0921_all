@@ -1,0 +1,14 @@
+# 自动巡检完整实测参数（加载到inspection_orchestrator私有命名空间）。
+numbered_flow:
+  max_task_number: 10
+  low_battery_threshold: 30.0
+  charge_target: 80.0
+  recharge_task_keywords: ["回充", "充电", "返航充电"]
+  task_switch_delay: 0.8
+  obstacle_timeout: 5.0
+  reverse_speed: 0.15
+  reverse_duration: 2.0
+  reverse_wait_for_start_point: true
+  # 实测安全策略：无车结论只恢复当前任务，不立即跳到下一个编号任务。
+  # 确认模型稳定后，如需“无车即跳过”，再改为 true。
+  advance_on_empty: false

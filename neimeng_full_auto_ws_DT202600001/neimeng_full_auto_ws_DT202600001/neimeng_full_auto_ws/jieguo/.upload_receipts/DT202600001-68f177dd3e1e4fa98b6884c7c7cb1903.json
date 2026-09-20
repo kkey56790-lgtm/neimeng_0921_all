@@ -1,0 +1,23 @@
+{
+  "taskName": "任务7",
+  "objectId": "DT202600001-68f177dd3e1e4fa98b6884c7c7cb1903",
+  "completedMs": 1789551017220,
+  "confirmation": "HTTP PUT success + MQTT PUBACK; not platform database ack",
+  "receipts": {
+    "任务7_1789551000944.jpg": {
+      "tid": "3b764b8f1da247928e9b18a809a30ce6",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-68f177dd3e1e4fa98b6884c7c7cb1903/7_1789551000944.jpg",
+      "putCompletedMs": 1789551016702,
+      "acknowledged": true,
+      "acknowledgedMs": 1789551016810
+    },
+    "任务7_1789551004518.jpg": {
+      "tid": "3b764b8f1da247928e9b18a809a30ce6",
+      "objectKey": "DT202600001/2026/09/16/DT202600001-68f177dd3e1e4fa98b6884c7c7cb1903/7_1789551004518.jpg",
+      "putCompletedMs": 1789551017094,
+      "acknowledged": true,
+      "acknowledgedMs": 1789551017197
+    }
+  },
+  "missingFiles": []
+}
