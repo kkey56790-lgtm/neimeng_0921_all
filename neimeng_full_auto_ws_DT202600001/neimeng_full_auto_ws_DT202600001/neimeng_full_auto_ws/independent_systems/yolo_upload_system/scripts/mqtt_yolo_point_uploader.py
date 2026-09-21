@@ -271,7 +271,10 @@ def load_detection_items(detector_file, profile="auto", env_file=DEFAULT_YOLO_EN
         }
     )
     resolved = resolve_class_profile(profile, env_file)
-    if resolved in ("coco", "coco80", "yolov8"):
+    if resolved == "inspection11":
+        names = constants.get("INSPECTION11_CLASSES", [])
+        display_names = constants.get("INSPECTION11_CLASS_NAMES_CN", names)
+    elif resolved in ("coco", "coco80", "yolov8"):
         names = constants.get("COCO_CLASSES", [])
         display_names = names
     else:
@@ -1017,7 +1020,7 @@ def create_parser():
     )
     parser.add_argument(
         "--class-profile", default="auto",
-        choices=("auto", "truck10", "rknn", "custom", "coco", "coco80", "yolov8"),
+        choices=("auto", "inspection11", "truck10", "rknn", "custom", "coco", "coco80", "yolov8"),
         help="auto读取yolo.env；标准COCO YOLOv8请使用coco80",
     )
     parser.add_argument(

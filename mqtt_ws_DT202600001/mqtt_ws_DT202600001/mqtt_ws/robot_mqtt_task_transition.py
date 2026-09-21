@@ -1,8 +1,41 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""DT202600001 机器人 MQTT 综合服务（顺序任务队列版）。
+"""DT202600001 机器人 MQTT 综合服务（台位完成后直接导航回door）。
 
-运行：python3 robot_mqtt_all_in_one_task_queue_batch.py
+流程：队列[任务1,任务2,任务3] -> 执行任务1 -> 任务1完成 -> 返回任务1首个巡航点doorx
+-> 确认到达 -> 执行任务2 -> 任务2完成 -> 返回任务2首个巡航点doorx -> 执行任务3。
+目标始终是刚完成台位的第一个导航点，名称须为door加数字（大小写兼容）。
+以实际路线首点为准，不按任务编号拼接door名称，也不取首点之前的点。队列最后一项
+完成且没有后续任务时结束；后续追加任务时，先完成上一台位的返回过渡。
+只新增本文件，完整包含原批量队列服务；部署时用本文件替换运行旧 MQTT
+调度进程，不要同时运行。依赖 requests、paho-mqtt，无 ROS 依赖。
+
+点位来源：get_task_list 中刚完成任务的第一个 TASK_MOVE_TO 子项，
+name（兼容task_name）为door点名，map为地图。
+按《室内外智能导航http协议V2.4》第7.13.1节，POST /task_manager/move_to，
+coordinate=POINT、name=实际door点名、path_mode=0自主规划、point_skip=0，
+开启避障。不需要A任务、不新建临时任务，不重跑台位任务。
+返回速度及左右绕障距离可在RETURN_*常量中设置，默认0.5m/s和各2m。
+result=true只表示指令受理；先按协议5.1读取door的局部pose，再通过
+get_task_status核对目标、地图和本次执行时间。兼容点名返回及实车的
+main_task_name=MOVE_TO、task_name=TASK_MOVE_TO、task_arg仅含坐标的返回。
+通用名字必须匹配door的x/y/yaw；连续两次完成且队列/循环结束、已定位才放行。
+旧FINISH快照不算本次到达；HTTP超时不盲目重发。故障/状态未知保留等待任务。
+
+新增 MQTT 上报：thing/robot/DT202600001/services_reply，QoS=1，retain=false。
+method=task_transition；tid=下一台位原指令tid；data 包含 result、stage、
+transitionId、eventId、fromTask、toTask、referenceTask、startPoint、targetPoint、
+mapName、sourcePoint、navigationMode、routeTasks（空数组）、msg。
+stage包括planned、submitted、started、arrived、failed、cancelled、status_unknown。
+导航失败 result=-1 并阻塞队列；task_stop 可停止导航并清空队列。
+返回导航不占用台位任务队列，不冒充台位 task_finished/task_completed。
+task_upload、task_switch、task_stop 的字段、校验和回执沿用 batch 版。
+task_switch 仍先停止当前任务、把目标插入队首、保留平台等待任务；成功后
+清理旧返回导航状态。非法切换或停止未确认时不丢弃旧返回状态。
+允许下发底盘目录中的其他任务；只有两个台位任务之间自动插入返回过渡。
+队列顺序仍按下发顺序，不重排平台任务；上报 startPoint、targetPoint 均为首个door点。
+
+运行：python3 robot_mqtt_task_transition.py
 先停止原综合服务/修复版，再启动本文件；同一机器人只能运行一个版本。
 队列按下发顺序执行；失败取消剩余任务，task_stop 停止当前并清空等待任务。
 队列、去重记录和待发回执保存在内存，程序退出/重启后不保留。
@@ -28,6 +61,9 @@ from collections import deque, OrderedDict
 import hashlib
 import json
 import queue
+import re
+import math
+from urllib.parse import quote
 import signal
 import threading
 import time
@@ -1424,8 +1460,277 @@ class QueuedRobotMQTTService(RobotMQTTService):
                     self.control_queue.task_done()
 
 
+# =============================================================================
+# 台位之间直接导航（HTTP协议V2.4第7.13.1节；不创建、不执行A任务）
+# =============================================================================
+MOVE_TO_URL = HTTP_BASE + "/task_manager/move_to"
+POSE_LIST_URL = HTTP_BASE + "/pose_manage/get_pose"
+RETURN_TARGET_TOLERANCE = 0.001  # task_arg目标参数精度，不是机器人实际到点距离阈值
+RETURN_SPEED = 0.5
+RETURN_MAX_LEFT_DISTANCE = 2.0
+RETURN_MAX_RIGHT_DISTANCE = 2.0
+STATION_NAME = re.compile(r"任务\s*0*(\d+)$")
+DOOR_NAME = re.compile(r"door\d+$", re.IGNORECASE)
+
+
+def plan_transition(catalog, from_name, to_name):
+    """只取刚完成任务的首个导航点，由底盘自主规划到点路径。"""
+    matches = [t for t in catalog if task_record_name(t) == from_name]
+    if len(matches) != 1:
+        raise ValueError("刚完成任务不存在或名称重复: " + from_name)
+    if not any(task_record_name(t) == to_name for t in catalog):
+        raise ValueError("下一任务不在底盘任务目录中: " + to_name)
+    moves = [t for t in matches[0].get("tasks", [])
+             if isinstance(t, dict) and t.get("task_type") == "TASK_MOVE_TO"]
+    if not moves:
+        raise ValueError(from_name + " 没有 TASK_MOVE_TO 巡航点")
+    point = moves[0]
+    name = point.get("name") or point.get("task_name")
+    map_name = point.get("map") or point.get("map_name")
+    if isinstance(map_name, dict):
+        map_name = map_name.get("name")
+    if not isinstance(name, str) or not DOOR_NAME.fullmatch(name.strip()):
+        raise ValueError(from_name + " 第一个巡航点必须命名为door加数字，实际为: " + str(name))
+    if not isinstance(map_name, str) or not map_name.strip():
+        raise ValueError(from_name + " 首个door巡航点缺少地图")
+    return {"fromTask": from_name, "toTask": to_name, "referenceTask": from_name,
+            "sourcePoint": moves[-1].get("name") or moves[-1].get("task_name", ""),
+            "startPoint": name.strip(), "targetPoint": name.strip(),
+            "mapName": map_name.strip(), "navigationMode": "POINT",
+            "routeTasks": []}
+
+
+def read_return_pose(plan):
+    """协议5.1：读取地图局部pose，不使用经纬度或map_pose墨卡托坐标。"""
+    response = http_get(POSE_LIST_URL + "?pose_name=" + quote(plan["targetPoint"], safe=""), "GET_RETURN_POSE")
+    if not isinstance(response, dict) or response.get("result") is not True:
+        raise ValueError("读取door点坐标失败，未发送导航")
+    data = response.get("data")
+    if not isinstance(data, list):
+        raise ValueError("巡航点列表data不是数组")
+    points = [p for p in data if isinstance(p, dict) and
+              p.get("name") == plan["targetPoint"] and p.get("map") == plan["mapName"]]
+    if len(points) != 1:
+        raise ValueError("当前地图内door点缺失或重名，未发送导航")
+    pose = points[0].get("pose")
+    if not isinstance(pose, dict):
+        raise ValueError("door点缺少局部pose坐标")
+    result = {}
+    for key in ("x", "y", "yaw"):
+        value = pose.get(key)
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+            raise ValueError("door点坐标无效: " + key)
+        result[key] = float(value)
+    return result
+
+
+def return_pose_matches(arg, target):
+    if not isinstance(target, dict):
+        return False
+    for key in ("x", "y", "yaw"):
+        value = arg.get(key)
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value):
+            return False
+        delta = value - target[key]
+        if key == "yaw":
+            delta = math.atan2(math.sin(delta), math.cos(delta))
+        if abs(delta) > RETURN_TARGET_TOLERANCE:
+            return False
+    return True
+
+
+def build_return_move(plan):
+    # POINT由底盘查询已保存点位。path_mode=0自主规划，不沿用巡检轨道；
+    # point_skip=0禁止不可达时跳过door。响应result=true只表示受理。
+    return {"coordinate": "POINT", "name": plan["targetPoint"], "map": plan["mapName"],
+            "path_mode": 0, "path_name": "", "point_skip": 0,
+            "speed": RETURN_SPEED, "drive_dir_mode": 0, "obstacle": True,
+            "max_left_distance": RETURN_MAX_LEFT_DISTANCE,
+            "max_right_distance": RETURN_MAX_RIGHT_DISTANCE}
+
+
+class TransitionRobotMQTTService(QueuedRobotMQTTService):
+    def __init__(self):
+        super().__init__()
+        self.last_station = None
+        self.transition = None
+
+    def _report_transition(self, stage, result=0, message=""):
+        context = self.transition
+        if context is None:
+            return
+        context["sequence"] += 1
+        context["stage"] = stage
+        data = dict(context["plan"], result=result, stage=stage, msg=message,
+                    robotCode=ROBOT_CODE, transitionId=context["id"],
+                    eventId="{}:{}".format(context["id"], context["sequence"]))
+        if stage in ("status_unknown", "failed"):
+            data["observedStatus"] = context.get("observed_status", {})
+            data["statusChecks"] = context.get("status_checks", {})
+            data["previousTaskTime"] = context.get("previous_status", {}).get("task_time")
+            data["moveResponse"] = context.get("move_response")
+        self.reply_outbox.append([{"tid": context["tid"], "method": "task_transition",
+                                  "timestamp": now_ms(), "data": data}, None])
+        print("[TRANSITION]", json.dumps(data, ensure_ascii=False))
+
+    def _prepare_transition(self):
+        source, target = self.last_station, self.waiting_tasks[0]
+        if not STATION_NAME.fullmatch(target["mainTaskName"]):
+            self.last_station = None
+            return
+        self.transition = {"id": create_tid(), "tid": target["tid"], "sequence": 0,
+                           "started": False, "finish_checks": 0, "unknown_reported": False,
+                           "plan": {"fromTask": source["mainTaskName"],
+                                    "referenceTask": source["mainTaskName"],
+                                    "toTask": target["mainTaskName"]}}
+        try:
+            plan = plan_transition(read_task_catalog(), source["mainTaskName"], target["mainTaskName"])
+            self.transition["plan"] = plan
+            current_map = get_current_map()
+            if (current_map.get("name") or current_map.get("map_name")) != plan["mapName"]:
+                raise ValueError("当前地图读取失败或与door点地图不一致")
+            plan["targetPose"] = read_return_pose(plan)
+            before = get_task_status()
+            if (before.get("main_task_name") != source["mainTaskName"] or
+                    _task_state(before) not in ("STATE_FINISH", "STATE_FINISHED") or
+                    not main_queue_exhausted(before)):
+                raise ValueError("底盘不再处于刚完成台位的空闲状态，未发送导航")
+            self.transition["previous_status"] = before
+            self.transition["start_time"] = time.monotonic()
+            self.transition["last_valid"] = self.transition["start_time"]
+            self._report_transition("planned", message="直接导航到当前台位的首个door点")
+            self.last_station = None
+            response = http_post(MOVE_TO_URL, build_return_move(plan), "RETURN_DOOR_MOVE_TO")
+            self.transition["move_response"] = response
+            if response is not None and response.get("result") is not True:
+                raise ValueError("底盘拒绝导航: " + str(response.get("data", response)))
+            # 请求超时也不能再次发送；使用状态确认是否已开始。
+            self._report_transition("submitted" if response else "status_unknown",
+                                    0 if response else -1,
+                                    "已提交，等待底盘状态确认" if response else
+                                    "导航响应未确认，继续轮询；不重发、不启动下一台位")
+            self.next_task_poll = 0.0
+        except Exception as exc:
+            self.queue_blocked = True
+            self._report_transition("failed", -1, str(exc))
+
+    def _return_unknown(self, reason):
+        if not self.transition["unknown_reported"]:
+            self.transition["unknown_reported"] = True
+            self._report_transition("status_unknown", -1, reason + "；保留队列，不启动下一项")
+
+    def _poll_return(self):
+        context = self.transition
+        now = time.monotonic()
+        if now < self.next_task_poll:
+            return
+        self.next_task_poll = now + TASK_POLL_INTERVAL
+        status = get_task_status()
+        context["observed_status"] = dict(status)
+        state = _task_state(status)
+        arg = status.get("task_arg")
+        arg = arg if isinstance(arg, dict) else {}
+        names = [value for value in (status.get("task_name"), arg.get("name")) if value]
+        maps = [value for value in (status.get("map"), arg.get("map")) if value]
+        plan = context["plan"]
+        previous = context["previous_status"]
+        run_time = status.get("task_time")
+        fresh = bool(run_time and run_time != previous.get("task_time"))
+        point_matches = bool(names) and all(n == plan["targetPoint"] for n in names)
+        pose_matches = return_pose_matches(arg, plan.get("targetPose"))
+        # 实车POINT接口把点名展开为坐标：main=MOVE_TO、task=TASK_MOVE_TO。
+        # 通用名字本身不能证明是door，必须匹配目标坐标。
+        # 实车task_time会在运行/结束时更新，不能作为固定执行ID。
+        # 尚未确认启动时仍要求时间不同于发送前，避免接受旧FINISH。
+        generic_matches = (status.get("main_task_name") == "MOVE_TO" and
+                           status.get("task_name") == "TASK_MOVE_TO" and
+                           (not arg.get("name") or arg.get("name") == plan["targetPoint"]) and
+                           pose_matches and (context["started"] or fresh))
+        named_matches = point_matches and (not any(k in arg for k in ("x", "y", "yaw")) or pose_matches)
+        matches = ((named_matches or generic_matches) and
+                   bool(maps) and all(n == plan["mapName"] for n in maps) and
+                   status.get("task_type") == "TASK_MOVE_TO")
+        context["status_checks"] = {
+            "pointMatches": point_matches,
+            "targetPoseMatches": pose_matches,
+            "genericMoveMatches": generic_matches,
+            "mapMatches": bool(maps) and all(n == plan["mapName"] for n in maps),
+            "typeMatches": status.get("task_type") == "TASK_MOVE_TO",
+            "freshTaskTime": fresh,
+            "queueExhausted": main_queue_exhausted(status),
+            "localized": status.get("local_state") is True,
+        }
+        if matches and not context["started"] and (
+                state in ("STATE_DOING", "STATE_PAUSE") or (fresh and state in TERMINAL_TASK_STATES)):
+            context["started"] = True
+            context["run_task_time"] = run_time
+            self._report_transition("started", message="已确认底盘执行返回door导航")
+        if matches and context["started"]:
+            if state in ("STATE_FAIL", "STATE_FAILED", "STATE_CANCEL", "STATE_CANCELED",
+                         "STATE_CANCELLED", "STATE_STOP", "STATE_STOPPED"):
+                context["finish_checks"] = 0
+                self.queue_blocked = True
+                self._report_transition("failed", -1, "返回door未完成: " + str(status.get("error_info", state)))
+                return
+            if (state in ("STATE_FINISH", "STATE_FINISHED") and
+                    main_queue_exhausted(status) and status.get("local_state") is True):
+                context["finish_checks"] += 1
+                context["last_valid"] = now
+                if context["finish_checks"] >= 2:
+                    self._report_transition("arrived", message="已确认返回door点，下一轮启动后续台位")
+                    self.transition = None
+                return
+            if state in ("STATE_DOING", "STATE_PAUSE"):
+                context["last_valid"] = now
+                context["unknown_reported"] = False
+        context["finish_checks"] = 0
+        if not context["started"] and now - context["start_time"] >= TASK_START_CONFIRM_TIMEOUT:
+            self._return_unknown("尚未确认本次door导航启动")
+        elif now - context["last_valid"] >= TASK_STATUS_UNKNOWN_TIMEOUT:
+            self._return_unknown("door导航状态缺失、不匹配或未确认到达")
+
+    def _advance_tasks(self):
+        if self.transition is not None:
+            if not self.queue_blocked:
+                self._poll_return()
+            return  # 包括本轮确认到达：下一轮才让基类取出任务10。
+        if (not self.queue_blocked and self.active_task is None and self.last_station
+                and self.waiting_tasks):
+            self._prepare_transition()
+            if self.transition is not None:
+                return
+        super()._advance_tasks()
+
+    def _finish_active(self, stage, result, msg):
+        task = self.active_task
+        super()._finish_active(stage, result, msg)
+        if stage == "finished" and result == 0 and STATION_NAME.fullmatch(task["mainTaskName"]):
+            self.last_station = task
+            if self.waiting_tasks and not self.queue_blocked:
+                self._prepare_transition()
+        else:
+            self.last_station = None
+
+    def handle_task_switch(self, tid, data):
+        # 基类先校验，再stop_task_queue并核实停止，然后将目标插入队首。
+        # 只有成功后才清理返回状态，校验或停止失败均保留。
+        super().handle_task_switch(tid, data)
+        if self.transition:
+            self._report_transition("cancelled", -1, "平台task_switch中止返回door，保留平台等待任务")
+        self.transition = None
+        self.last_station = None
+
+    def handle_task_stop(self, tid, data):
+        super().handle_task_stop(tid, data)
+        if self.transition:
+            self._report_transition("cancelled", -1, "平台停止返回door并清空队列")
+        self.transition = None
+        self.last_station = None
+
+
+
 def main():
-    service = QueuedRobotMQTTService()
+    service = TransitionRobotMQTTService()
 
     def handle_signal(signum, _frame):
         print("\n[SYSTEM] 收到信号 {}，正在停止...".format(signum))

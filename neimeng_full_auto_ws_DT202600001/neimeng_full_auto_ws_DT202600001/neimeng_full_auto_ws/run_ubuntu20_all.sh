@@ -57,7 +57,7 @@ if [[ "${1:-}" == "--inline" ]]; then
 fi
 
 case "$YOLO_BACKEND" in
-  yolov8|rknn|rknn_truck|custom) ;;
+  inspection11|0919|yolov8|rknn|rknn_truck|custom) ;;
   *)
     echo "未知YOLO后端: $YOLO_BACKEND；可选 yolov8 或 rknn" >&2
     exit 2

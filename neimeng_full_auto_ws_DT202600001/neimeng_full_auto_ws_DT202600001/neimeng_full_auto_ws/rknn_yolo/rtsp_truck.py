@@ -91,6 +91,20 @@ if os.environ.get("YOLO_CLASS_PROFILE", DEFAULT_CLASS_PROFILE).strip().lower() i
     CLASSES = COCO_CLASSES
     CLASS_NAMES_CN = COCO_CLASSES
 
+# 0919模型类别常量，同时供上传端通过AST读取。
+INSPECTION11_CLASSES = [
+    "chocks", "extinguisher", "plate", "tag", "light", "support",
+    "screw", "tank", "lamp_broken", "box_broken", "warning",
+]
+INSPECTION11_CLASS_NAMES_CN = [
+    "挡掩", "灭火器", "车牌", "检修牌", "车灯", "支护",
+    "轮毂螺丝", "油箱", "车灯破损", "箱体破损", "警告标志",
+]
+if os.environ.get("YOLO_CLASS_PROFILE", DEFAULT_CLASS_PROFILE).strip().lower() == "inspection11":
+    CLASSES = INSPECTION11_CLASSES
+    CLASS_NAMES_CN = INSPECTION11_CLASS_NAMES_CN
+
+
 
 # ============================================================
 # RTSP 最新帧读取

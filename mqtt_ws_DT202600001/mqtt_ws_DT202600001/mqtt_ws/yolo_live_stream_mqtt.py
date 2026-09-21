@@ -52,6 +52,52 @@ ROBOT_NAME = "内蒙古巡检车-DT202600001"
 # --------------------------
 YOLO_ZMQ_URL = "tcp://127.0.0.1:5566"
 
+# 0919-2.rknn：类别顺序来自其源模型 0919.onnx 的 names 元数据。
+# 此程序接收检测 JSON，不负责加载 RKNN 或执行推理。
+DETECTION_CLASSES = (
+    ("chocks", "挡掩"),
+    ("extinguisher", "灭火器"),
+    ("plate", "车牌"),
+    ("tag", "检修牌"),
+    ("light", "车灯"),
+    ("support", "支护"),
+    ("screw", "轮毂螺丝"),
+    ("tank", "油箱"),
+    ("lamp_broken", "车灯破损"),
+    ("box_broken", "箱体破损"),
+    ("warning", "警告标志"),
+)
+
+
+def normalize_detection(data):
+    """按新模型 ID 统一 MQTT 和直播标签，保留坐标、置信度等字段。"""
+    result = dict(data)
+    objects = data.get("objects", [])
+    if not isinstance(objects, list):
+        objects = []
+    normalized = []
+    for obj in objects:
+        if not isinstance(obj, dict):
+            continue
+        item = dict(obj)
+        raw_id = item.get("class_id")
+        class_id = None
+        if isinstance(raw_id, int) and not isinstance(raw_id, bool):
+            class_id = raw_id
+        elif isinstance(raw_id, str) and raw_id.strip().isdigit():
+            class_id = int(raw_id.strip())
+        if class_id is not None and 0 <= class_id < len(DETECTION_CLASSES):
+            item["class_id"] = class_id
+            item["class_name"], item["class_name_cn"] = DETECTION_CLASSES[class_id]
+        else:
+            # 不把未知 ID 误标为某个检测项目。
+            item["class_name"] = "unknown_{}".format(raw_id)
+            item["class_name_cn"] = "未知类别({})".format(raw_id)
+        normalized.append(item)
+    result["objects"] = normalized
+    result["object_count"] = len(normalized)
+    return result
+
 
 # --------------------------
 # 摄像头 RTSP
@@ -216,7 +262,7 @@ def yolo_receiver():
 
             with detection_lock:
 
-                latest_detection = data
+                latest_detection = normalize_detection(data)
 
         except zmq.Again:
 
@@ -889,10 +935,6 @@ def draw_detection(
 
             class_name = (
                 obj.get(
-                    "class_name_cn"
-                )
-                or
-                obj.get(
                     "class_name"
                 )
                 or
@@ -928,10 +970,7 @@ def draw_detection(
                 f"{confidence:.2f}"
             )
 
-            # OpenCV 默认字体不支持中文
-            # 中文名称可能显示方框，
-            # 所以若class_name_cn存在问题，
-            # 可改成class_name
+            # OpenCV 默认字体不支持中文；直播用英文，MQTT 保留中英文。
 
             cv2.putText(
                 frame,

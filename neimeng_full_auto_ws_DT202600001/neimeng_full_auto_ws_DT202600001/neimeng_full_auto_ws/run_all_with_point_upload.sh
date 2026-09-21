@@ -13,7 +13,7 @@ if [[ -f "$MQTT_ENV_FILE" ]]; then
   source "$MQTT_ENV_FILE"
   set +a
 fi
-BACKEND="${1:-rknn}"
+BACKEND="${1:-inspection11}"
 ROBOT_CODE="${ROBOT_CODE:-DT202600001}"
 ROBOT_MQTT_HOST="${ROBOT_MQTT_HOST:-222.187.130.102}"
 ROBOT_MQTT_PORT="${ROBOT_MQTT_PORT:-1883}"
@@ -27,6 +27,22 @@ CRUISE_RECEIVER="$WORKSPACE_DIR/independent_systems/yolo_upload_system/scripts/m
 YOLO_ENV="$WORKSPACE_DIR/rknn_yolo/yolo.env"
 DETECTOR_FILE="$WORKSPACE_DIR/rknn_yolo/rtsp_truck.py"
 RESULTS_ROOT="$WORKSPACE_DIR/jieguo"
+MAIN_BACKEND="$BACKEND"
+case "$BACKEND" in
+  inspection11|0919)
+    UPLOAD_CLASS_PROFILE=inspection11
+    MAIN_BACKEND=rknn
+    INSPECTION_MODEL="${INSPECTION_RKNN_MODEL:-$WORKSPACE_DIR/rknn_yolo/models/0919-2.rknn}"
+    # 下游可能切换工作目录，统一传递绝对路径。
+    [[ "$INSPECTION_MODEL" = /* ]] || INSPECTION_MODEL="$PWD/$INSPECTION_MODEL"
+    ;;
+  yolov8) UPLOAD_CLASS_PROFILE=coco80 ;;
+  *) UPLOAD_CLASS_PROFILE=auto ;;
+esac
+if [[ "$UPLOAD_CLASS_PROFILE" == "inspection11" && ! -f "${INSPECTION_RKNN_MODEL:-$WORKSPACE_DIR/rknn_yolo/models/0919-2.rknn}" ]]; then
+  echo "缺少十一类模型: ${INSPECTION_RKNN_MODEL:-$WORKSPACE_DIR/rknn_yolo/models/0919-2.rknn}" >&2
+  exit 1
+fi
 
 if [[ ! -f "$MAIN_LAUNCHER" ]]; then
   echo "找不到原有启动脚本: $MAIN_LAUNCHER" >&2
@@ -44,6 +60,7 @@ fi
 MAIN_PID=""
 UPLOADER_PID=""
 CRUISE_PID=""
+INSPECTION_ENV_FILE=""
 if [[ ! -f "$CRUISE_RECEIVER" ]]; then
   echo "缺少中台巡检接收程序: $CRUISE_RECEIVER" >&2
   exit 1
@@ -71,6 +88,9 @@ cleanup() {
     wait "$MAIN_PID" 2>/dev/null || true
   fi
 
+  if [[ -n "$INSPECTION_ENV_FILE" ]]; then
+    rm -f -- "$INSPECTION_ENV_FILE"
+  fi
   exit "$status"
 }
 trap cleanup EXIT INT TERM
@@ -115,8 +135,37 @@ echo "检查上传依赖: $(command -v python3)"
 }
 
 # 依赖检查通过后再启动硬件全流程。
-echo "启动原有全流程: backend=$BACKEND"
-bash "$MAIN_LAUNCHER" "$BACKEND" --inline "$@" &
+OCR_ENABLED="${PLATE_OCR_ENABLED:-0}"
+if [[ "${OCR_ENABLED,,}" =~ ^(1|true|yes)$ ]]; then
+  echo "检查车牌OCR依赖并初始化识别模型（首次运行可能需要下载）..."
+  "${UPLOAD_ENV[@]}" python3 -c 'import sys; sys.path.insert(0, sys.argv[1]); from plate_ocr import PlateOCR; PlateOCR.from_env(); print("车牌OCR模型就绪")' \
+    "$WORKSPACE_DIR/independent_systems/yolo_upload_system/scripts" || {
+    echo "车牌OCR初始化失败，尚未启动全流程。请在上传进程使用的Python环境中安装easyocr，并检查OCR模型文件；详见上方异常。" >&2
+    exit 1
+  }
+fi
+if [[ "$UPLOAD_CLASS_PROFILE" == "inspection11" ]]; then
+  # run_yolo.sh 会 source 配置；在原配置之后固定模型和类别，避免被旧值覆盖。
+  ORIGINAL_YOLO_ENV="${NEIMENG_YOLO_ENV:-$YOLO_ENV}"
+  if [[ -z "${NEIMENG_YOLO_ENV:-}" && ! -f "$ORIGINAL_YOLO_ENV" && -f /etc/neimeng_xunjian/yolo.env ]]; then
+    ORIGINAL_YOLO_ENV=/etc/neimeng_xunjian/yolo.env
+  fi
+  [[ "$ORIGINAL_YOLO_ENV" = /* ]] || ORIGINAL_YOLO_ENV="$PWD/$ORIGINAL_YOLO_ENV"
+  INSPECTION_ENV_FILE="$(mktemp "${TMPDIR:-/tmp}/neimeng-inspection11.XXXXXX")"
+  {
+    if [[ -f "$ORIGINAL_YOLO_ENV" ]]; then
+      printf 'source %q\n' "$ORIGINAL_YOLO_ENV"
+    fi
+    printf 'export RKNN_TRUCK_MODEL=%q\n' "$INSPECTION_MODEL"
+    printf 'export INSPECTION_RKNN_MODEL=%q\n' "$INSPECTION_MODEL"
+    printf 'export YOLO_CLASS_PROFILE=inspection11\n'
+  } > "$INSPECTION_ENV_FILE"
+  export NEIMENG_YOLO_ENV="$INSPECTION_ENV_FILE"
+  export RKNN_TRUCK_MODEL="$INSPECTION_MODEL"
+  export YOLO_CLASS_PROFILE=inspection11
+fi
+echo "启动原有全流程: backend=$MAIN_BACKEND profile=$UPLOAD_CLASS_PROFILE"
+bash "$MAIN_LAUNCHER" "$MAIN_BACKEND" --inline "$@" &
 MAIN_PID=$!
 
 echo "等待ROS话题 /inspection/status（最长90秒）..."
@@ -157,6 +206,7 @@ echo "启动后补传已封存图片/TXT；未结束任务等待底盘状态续�
   --file-topic "thing/robot/$ROBOT_CODE/file" \
   --yolo-env "$YOLO_ENV" \
   --detector-file "$DETECTOR_FILE" \
+  --class-profile "$UPLOAD_CLASS_PROFILE" \
   --results-root "$RESULTS_ROOT" &
 UPLOADER_PID=$!
 

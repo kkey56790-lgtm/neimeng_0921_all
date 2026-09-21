@@ -16,10 +16,16 @@ if [[ -f "$ENV_FILE" ]]; then
   source "$ENV_FILE"
   set +a
 fi
+# 仅隔离YOLO子进程：避免用户目录中EasyOCR的headless OpenCV覆盖Conda的QT版本。
+# 上传程序由父脚本另行启动，仍可访问用户目录中的EasyOCR。
+export PYTHONNOUSERSITE=1
 PYTHON_BIN="${RKNN_PYTHON:-python3}"
 BACKEND="${1:-${YOLO_BACKEND:-rknn}}"
 
 case "$BACKEND" in
+  inspection11|0919)
+    exec "$PYTHON_BIN" "$SCRIPT_DIR/run_0919.py"
+    ;;
   yolov8)
     exec "$PYTHON_BIN" "$SCRIPT_DIR/run_yolov8.py"
     ;;
@@ -27,7 +33,7 @@ case "$BACKEND" in
     exec "$PYTHON_BIN" "$SCRIPT_DIR/run_rknn_truck.py"
     ;;
   *)
-    echo "未知识别器: $BACKEND；可选 yolov8 或 rknn" >&2
+    echo "未知识别器: $BACKEND；可选 inspection11、yolov8 或 rknn" >&2
     exit 2
     ;;
 esac

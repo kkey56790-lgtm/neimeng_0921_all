@@ -105,4 +105,66 @@ class QueueTests(unittest.TestCase):
         self.upload();self.state('STATE_FINISH',name='OTHER',queue=4)
         self.start.assert_not_called()
 
+    def test_platform_station_codes_message(self):
+        name='任务10'
+        self.catalog.return_value=[{'name':name}]
+        payload={'tid':'73dda467f4404950aef3b02b0c3e5477','method':'task_upload',
+                 'timestamp':1789885408928,'data':{'robotCode':m.ROBOT_CODE,
+                 'stationCode':['TASK-43EDCA6879D59AF7']}}
+        msg=types.SimpleNamespace(retain=False,topic=m.SERVICE_TOPIC,payload=json.dumps(payload).encode())
+        self.s.on_message(None,None,msg)
+        self.s._dispatch(*self.s.control_queue.get_nowait())
+        self.assertEqual(self.s.waiting_tasks[0]['mainTaskName'],name)
+        self.assertEqual(self.s.waiting_tasks[0]['tid'],payload['tid'])
+        self.s.on_message(None,None,msg)
+        self.s._dispatch(*self.s.control_queue.get_nowait())
+        self.assertEqual(len(self.s.waiting_tasks),1)
+
+    def test_station_codes_preserve_order_and_atomic_validation(self):
+        data={'robotCode':m.ROBOT_CODE,'stationCode':[m.generate_task_code('B'),m.generate_task_code('A')]}
+        self.s._dispatch('codes','task_upload',data)
+        self.assertEqual([t['mainTaskName'] for t in self.s.waiting_tasks],['B','A'])
+        self.s._dispatch('bad','task_upload',dict(data,stationCode=[m.generate_task_code('A'),'UNKNOWN']))
+        self.assertEqual(len(self.s.waiting_tasks),2)
+
+    def test_invalid_station_code_shapes(self):
+        for value in ([],None,'TASK-123',[None],[123],[[]]):
+            with self.assertRaises(ValueError):
+                m.parse_task_batch({'stationCode':value})
+
+    def test_completed_main_cleared_in_reports_only(self):
+        self.upload(('A',));self.tick('STATE_CANCEL')
+        self.state('STATE_DOING');self.state('STATE_FINISH');self.state('STATE_FINISH')
+        raw = dict(self.status.return_value)
+        for method in ('osd', 'task_list'):
+            message = {'method':method, 'data':{'currentTask':m.public_current_task(raw)}}
+            self.s.publish_json(m.OSD_TOPIC,message)
+            wire = json.loads(self.s.client.publish.call_args.args[1])
+            current = wire['data']['currentTask']
+            self.assertEqual(current['main_task_name'],'')
+            self.assertEqual(current['taskCode'],'')
+            self.assertEqual(current['task_name'],'point1')
+            self.assertEqual(current['task_state'],'STATE_FINISH')
+        self.assertEqual(raw['main_task_name'],'A')
+        self.assertIsNone(self.s.active_task)
+        self.assertEqual(len(self.msgs('task_finished')),1)
+        # 同名重启、外部任务及未确认完成的点位不能被隐藏。
+        for changes in ({'task_state':'STATE_DOING'}, {'task_time':'new-run'},
+                        {'main_task_name':'B'}, {'queue_size':1}):
+            status=dict(raw,**changes)
+            message={'method':'osd','data':{'currentTask':m.public_current_task(status)}}
+            self.s.publish_json(m.OSD_TOPIC,message)
+            self.assertEqual(message['data']['currentTask']['main_task_name'],status['main_task_name'])
+
+    def test_osd_log_uses_cleared_main_name(self):
+        import contextlib
+        import io
+        self.upload(('A',));self.tick('STATE_CANCEL')
+        self.state('STATE_DOING');self.state('STATE_FINISH');self.state('STATE_FINISH')
+        self.s.connected.set()
+        output=io.StringIO()
+        with patch.object(m,'get_base_data',return_value={}), patch.object(m,'get_current_map',return_value={'name':'map'}), contextlib.redirect_stdout(output):
+            self.s.publish_osd()
+        self.assertIn('主任务= 当前任务=point1',output.getvalue())
+
 if __name__=='__main__':unittest.main()

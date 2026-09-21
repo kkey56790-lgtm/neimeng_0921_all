@@ -1075,6 +1075,10 @@ class SnapshotJieguoUploader(JieguoUploader):
 
     def __init__(self, args):
         args.robot_code = 'DT202600001'
+        from plate_ocr import PlateOCR
+        self.plate_ocr = PlateOCR.from_env()
+        if self.plate_ocr is not None:
+            base.rospy.loginfo('车牌OCR已启用：截图时识别，结果上传至files[].result中的车牌号')
         base.rospy.loginfo('截图上传版本=result-v4（files内携带result和pointName） source=%s', os.path.abspath(__file__))
         super().__init__(args)
 
@@ -1155,10 +1159,14 @@ class SnapshotJieguoUploader(JieguoUploader):
             collection.best_score = 0
             # 单图识别项只来自当前帧，不能使用全任务累计的类别。
             collection.counts = {item['name']: 0 for item in self.items}
+            # 截图上传置信度至少为0.6；保留原配置中更严格的阈值。
+            self.min_confidence = max(0.6, self.min_confidence)
             base.YoloPointMqttUploader._collect_frame(self, frame)
             if (collection.best_image is None or not collection.best_objects
                     or time.monotonic() - self.last_snapshot < self.snapshot_interval):
                 return
+            if getattr(self, 'plate_ocr', None) is not None:
+                self.plate_ocr.recognize_frame(collection.best_image, collection.best_objects)
             name = task_image_name(self.current_task_name, self.results_root)
             image = self._save_screenshot(collection, os.path.splitext(name)[0])
             if not image:
@@ -1169,10 +1177,11 @@ class SnapshotJieguoUploader(JieguoUploader):
                 if collection.counts[item['name']] <= 0:
                     continue
                 # 目标检测没有文字时传空字符串；有识别正文则保留，不伪造车牌。
-                contents = list(dict.fromkeys(str(obj.get('content') or '')
+                contents = list(dict.fromkeys((str(obj.get('result_name') or item['display_name']),
+                                              str(obj.get('content') or ''))
                     for obj in collection.best_objects if obj.get('canonical_name') == item['name']))
-                for content in contents or ['']:
-                    detected.append(dict(name=item['display_name'], content=content))
+                for result_name, content in contents or [(item['display_name'], '')]:
+                    detected.append(dict(name=result_name, content=content))
             metadata = dict(taskName=self.current_task_name, result=detected,
                             timestamp=stamp, pointName=collection.point_name,
                             robotCode=self.robot_code)
